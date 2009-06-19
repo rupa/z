@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # pure shell version of 'new j'
-# has frecency and rank, recent not supported
+# has frecency, rank, and recent
 # has common and case preference
 # lists to stderr
 # protect multiple PROMPT_COMMAND appends
@@ -44,9 +44,10 @@ zz() {
  else
   # list/go
   while [ "$1" ]; do case $1 in
-   -h) echo "j [-h][-l][-r] args" >/dev/stderr; return;;
+   -h) echo "zz [-h][-l][-r][-x] args" >/dev/stderr; return;;
    -l) local list=1;;
-   -r) local rank=1;;
+   -r) local typ="recent";;
+   -x) local typ="rank";;
    --) while [ "$1" ]; do shift; local q="$q $1";done;;
     *) local q="$q $1";;
   esac; local n=$1; shift; done
@@ -56,7 +57,7 @@ zz() {
    cd "$n"
    return
   }
-  cd="$(awk -v t="$(date +%s)" -v list="$list" -v rank="$rank" -v args="$q" -F"|" '
+  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v args="$q" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
@@ -94,8 +95,10 @@ zz() {
    BEGIN { split(args,a," ") }
    {
     if( system("test -d \"" $1 "\"") ) next
-    if( rank ) {
+    if( typ == "rank" ) {
      f = $2
+    } else if( typ == "recent" ) {
+     f = 1/(t-$3)
     } else f = frecent($2, $3)
     case[$1] = nocase[$1] = f
     for( i in a ) if( $1 !~ a[i] ) delete case[$1]
