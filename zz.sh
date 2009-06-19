@@ -46,8 +46,8 @@ zz() {
   while [ "$1" ]; do case $1 in
    -h) echo "zz [-h][-l][-r][-x] args" >/dev/stderr; return;;
    -l) local list=1;;
-   -r) local typ="recent";;
-   -x) local typ="rank";;
+   -r) local typ="rank";;
+   -t) local typ="recent";;
    --) while [ "$1" ]; do shift; local q="$q $1";done;;
     *) local q="$q $1";;
   esac; local n=$1; shift; done
