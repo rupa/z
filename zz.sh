@@ -44,7 +44,7 @@ zz() {
  else
   # list/go
   while [ "$1" ]; do case $1 in
-   -h) echo "zz [-h][-l][-r][-x] args" >/dev/stderr; return;;
+   -h) echo "zz [-h][-l][-r][-t] args" >/dev/stderr; return;;
    -l) local list=1;;
    -r) local typ="rank";;
    -t) local typ="recent";;
@@ -67,14 +67,14 @@ zz() {
    }
    function output(r, s, c) {
     if( list ) {
-     for( i in r ) {
-      if( r[i] ) printf "%-15s %s\n", r[i], i | "sort -n >/dev/stderr"
-     }
-     if( c ) printf "%-15s %s\n", "common:", c | "sort -n >/dev/stderr"
+     if( typ == "recent" ) {
+      cmd = "sort -nr >/dev/stderr"
+     } else cmd = "sort -n >/dev/stderr"
+     for( i in r ) if( r[i] ) printf "%-15s %s\n", r[i], i | cmd
+     if( c ) printf "%-15s %s\n", "common:", c > "/dev/stderr"
     } else {
-     if( c ) {
-      print c
-     } else print s
+     if( c ) s = c
+     print s
     }
    }
    function common(r, a, nc) {
@@ -82,6 +82,7 @@ zz() {
      if( ! r[i] ) continue
      if( !shortest || length(i) < length(shortest) ) shortest = i
     }
+    if( shortest == "/" ) return
     for( i in r ) {
      if( ! r[i] ) continue
      if( i !~ shortest ) x = 1
@@ -98,7 +99,7 @@ zz() {
     if( typ == "rank" ) {
      f = $2
     } else if( typ == "recent" ) {
-     f = 1/(t-$3)
+     f = t-$3
     } else f = frecent($2, $3)
     case[$1] = nocase[$1] = f
     for( i in a ) if( $1 !~ a[i] ) delete case[$1]
