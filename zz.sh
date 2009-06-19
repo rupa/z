@@ -57,7 +57,7 @@ zz() {
    cd "$n"
    return
   }
-  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v args="$q" -F"|" '
+  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$q" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
@@ -93,7 +93,7 @@ zz() {
     } else for( i in a ) if( shortest !~ a[i] ) x = 1
     if( !x ) return shortest
    }
-   BEGIN { split(args,a," ") }
+   BEGIN { split(q, a, " ") }
    {
     if( system("test -d \"" $1 "\"") ) next
     if( typ == "rank" ) {
