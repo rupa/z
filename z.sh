@@ -6,7 +6,7 @@
 # lists to stderr
 # protect multiple PROMPT_COMMAND appends
 
-zz() {
+z() {
  local datafile=$HOME/.z
  if [ "$1" = "--add" ]; then
   # add
@@ -44,7 +44,7 @@ zz() {
  else
   # list/go
   while [ "$1" ]; do case $1 in
-   -h) echo "zz [-h][-l][-r][-t] args" >/dev/stderr; return;;
+   -h) echo "z [-h][-l][-r][-t] args" >/dev/stderr; return;;
    -l) local list=1;;
    -r) local typ="rank";;
    -t) local typ="recent";;
@@ -126,8 +126,8 @@ zz() {
  fi
 }
 # tab completion
-complete -C 'zz --complete "$COMP_LINE"' zz
+complete -C 'z --complete "$COMP_LINE"' z
 # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-echo $PROMPT_COMMAND | grep -q "zz" || {
- PROMPT_COMMAND='zz --add "$(pwd -P)";'"$PROMPT_COMMAND"
+echo $PROMPT_COMMAND | grep -q "z" || {
+ PROMPT_COMMAND='z --add "$(pwd -P)";'"$PROMPT_COMMAND"
 }
