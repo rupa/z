@@ -79,13 +79,11 @@ z() {
    }
    function common(r, a, nc) {
     for( i in r ) {
-     if( ! r[i] ) continue
-     if( !shortest || length(i) < length(shortest) ) shortest = i
+     if( r[i] && (!shortest || length(i) < length(shortest)) ) shortest = i
     }
     if( shortest == "/" ) return
     for( i in r ) {
-     if( ! r[i] ) continue
-     if( i !~ shortest ) x = 1
+     if( r[i] && i !~ shortest ) x = 1
     }
     if( x ) return
     if( nc ) {
@@ -102,8 +100,10 @@ z() {
      f = t-$3
     } else f = frecent($2, $3)
     case[$1] = nocase[$1] = f
-    for( i in a ) if( $1 !~ a[i] ) delete case[$1]
-    for( i in a ) if( tolower($1) !~ tolower(a[i]) ) delete nocase[$1]
+    for( i in a ) {
+     if( $1 !~ a[i] ) delete case[$1]
+     if( tolower($1) !~ tolower(a[i]) ) delete nocase[$1]
+    }
     if( case[$1] > oldf ) {
      cx = $1
      oldf = case[$1]
@@ -116,9 +116,7 @@ z() {
    END {
     if( cx ) {
      output(case, cx, common(case, a, 0))
-    } else if( ncx ) {
-     output(nocase, ncx, common(nocase, a, 1))
-    }
+    } else if( ncx ) output(nocase, ncx, common(nocase, a, 1))
    }
   ' $datafile)"
   mv -f $datafile.tmp $datafile
