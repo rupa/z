@@ -121,6 +121,5 @@ z() {
 # tab completion
 complete -C 'z --complete "$COMP_LINE"' z
 # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-echo $PROMPT_COMMAND | grep -q "z" || {
- PROMPT_COMMAND='z --add "$(pwd -P)";'"$PROMPT_COMMAND"
-}
+echo $PROMPT_COMMAND | grep -q "z"
+[ $? -gt 0 ] && PROMPT_COMMAND='z --add "$(pwd -P)";'"$PROMPT_COMMAND"
