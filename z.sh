@@ -1,10 +1,6 @@
 #!/bin/bash
 
 # pure shell version of 'new j'
-# has frecency, rank, and recent
-# has common and case preference
-# lists to stderr
-# protect multiple PROMPT_COMMAND appends
 
 z() {
  local datafile=$HOME/.z
@@ -76,15 +72,15 @@ z() {
    }
    function common(matches, fnd, nc) {
     for( i in matches ) {
-     if( matches[i] && (!shortest || length(i) < length(shortest)) ) shortest = i
+     if( matches[i] && (!short || length(i) < length(short)) ) short = i
     }
-    if( shortest == "/" ) return
-    for( i in matches ) if( matches[i] && i !~ shortest ) x = 1
+    if( short == "/" ) return
+    for( i in matches ) if( matches[i] && i !~ short ) x = 1
     if( x ) return
     if( nc ) {
-     for( i in fnd ) if( tolower(shortest) !~ tolower(fnd[i]) ) x = 1
-    } else for( i in fnd ) if( shortest !~ fnd[i] ) x = 1
-    if( !x ) return shortest
+     for( i in fnd ) if( tolower(short) !~ tolower(fnd[i]) ) x = 1
+    } else for( i in fnd ) if( short !~ fnd[i] ) x = 1
+    if( !x ) return short
    }
    BEGIN { split(q, a, " ") }
    {
