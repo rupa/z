@@ -89,6 +89,7 @@ z() {
    BEGIN { split(q, a, " ") }
    {
     if( system("test -d \"" $1 "\"") ) next
+    print $0 >> FILENAME ".tmp"
     if( typ == "rank" ) {
      f = $2
     } else if( typ == "recent" ) {
@@ -106,7 +107,6 @@ z() {
      ncx = $1
      noldf = nocase[$1]
     }
-    print $0 >> FILENAME ".tmp"
    }
    END {
     if( cx ) {
