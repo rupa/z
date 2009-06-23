@@ -13,51 +13,48 @@ z() {
   shift
   # $HOME isn't worth matching
   [ "$*" = "$HOME" ] && return
-  awk -v q="$*" -v t="$(date +%s)" -F"|" '
-   BEGIN { l[q] = 1; d[q] = t }
+  awk -v p="$*" -v t="$(date +%s)" -F"|" '
+   BEGIN { rank[p] = 1; time[p] = t }
    $2 >= 1 {
-    if( $1 == q ) {
-     l[$1] = $2 + 1
-     d[$1] = t
+    if( $1 == p ) {
+     rank[$1] = $2 + 1
+     time[$1] = t
     } else {
-     l[$1] = $2
-     d[$1] = $3
+     rank[$1] = $2
+     time[$1] = $3
     }
     count += $2
    }
    END {
     if( count > 1000 ) {
-     for( i in l ) print i "|" 0.9*l[i] "|" d[i] # aging
-    } else for( i in l ) print i "|" l[i] "|" d[i]
+     for( i in rank ) print i "|" 0.9*l[i] "|" time[i] # aging
+    } else for( i in rank ) print i "|" rank[i] "|" time[i]
    }
   ' $datafile 2>/dev/null > $datafile.tmp
   mv -f $datafile.tmp $datafile
  elif [ "$1" = "--complete" ]; then
   # tab completion
   awk -v q="$2" -F"|" '
-   BEGIN { split(substr(q,3),a," ") }
+   BEGIN { split(substr(q,3),fnd," ") }
    {
     if( system("test -d \"" $1 "\"") ) next
-    for( i in a ) $1 !~ a[i] && $1 = ""; if( $1 ) print $1
+    for( i in fnd ) $1 !~ fnd[i] && $1 = ""; if( $1 ) print $1
    }
   ' $datafile 2>/dev/null
  else
   # list/go
-  while [ "$1" ]; do case $1 in
+  while [ "$1" ]; do case "$1" in
    -h) echo "z [-h][-l][-r][-t] args" >/dev/stderr; return;;
    -l) local list=1;;
    -r) local typ="rank";;
    -t) local typ="recent";;
-   --) while [ "$1" ]; do shift; local q="$q $1";done;;
-    *) local q="$q $1";;
-  esac; local n=$1; shift; done
-  [ "$q" ] || local list=1
+   --) while [ "$1" ]; do shift; local fnd="$fnd $1";done;;
+    *) local fnd="$fnd $1";;
+  esac; local last=$1; shift; done
+  [ "$fnd" ] || local list=1
   # if we hit enter on a completion just go there
-  [ -d "$n" ] && {
-   cd "$n"
-   return
-  }
-  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$q" -F"|" '
+  [ -d "$last" ] && cd "$last" && return
+  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
@@ -65,30 +62,28 @@ z() {
     if( dx < 604800 ) return rank/2
     return rank/4
    }
-   function output(r, s, c) {
+   function output(files, toopen, override) {
     if( list ) {
      if( typ == "recent" ) {
       cmd = "sort -nr >/dev/stderr"
      } else cmd = "sort -n >/dev/stderr"
-     for( i in r ) if( r[i] ) printf "%-15s %s\n", r[i], i | cmd
-     if( c ) printf "%-15s %s\n", "common:", c > "/dev/stderr"
+     for( i in files ) if( files[i] ) printf "%-15s %s\n", files[i], i | cmd
+     if( override ) printf "%-15s %s\n", "common:", override > "/dev/stderr"
     } else {
-     if( c ) s = c
-     print s
+     if( override ) toopen = override
+     print toopen
     }
    }
-   function common(r, a, nc) {
-    for( i in r ) {
-     if( r[i] && (!shortest || length(i) < length(shortest)) ) shortest = i
+   function common(matches, fnd, nc) {
+    for( i in matches ) {
+     if( matches[i] && (!shortest || length(i) < length(shortest)) ) shortest = i
     }
     if( shortest == "/" ) return
-    for( i in r ) {
-     if( r[i] && i !~ shortest ) x = 1
-    }
+    for( i in matches ) if( matches[i] && i !~ shortest ) x = 1
     if( x ) return
     if( nc ) {
-     for( i in a ) if( tolower(shortest) !~ tolower(a[i]) ) x = 1
-    } else for( i in a ) if( shortest !~ a[i] ) x = 1
+     for( i in fnd ) if( tolower(shortest) !~ tolower(fnd[i]) ) x = 1
+    } else for( i in fnd ) if( shortest !~ fnd[i] ) x = 1
     if( !x ) return shortest
    }
    BEGIN { split(q, a, " ") }
