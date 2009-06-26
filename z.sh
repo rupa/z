@@ -50,6 +50,7 @@ z() {
   [ "$fnd" ] || local list=1
   # if we hit enter on a completion just go there
   [ -d "$last" ] && cd "$last" && return
+  [ -d "$datafile" ] || return
   cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
    function frecent(rank, time) {
     dx = t-time
