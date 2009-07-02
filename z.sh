@@ -53,7 +53,7 @@ z() {
  else
   # list/go
   while [ "$1" ]; do case "$1" in
-   -h) echo "z [-h][-l][-r][-t] args" >/dev/stderr; return;;
+   -h) echo "z [-h][-l][-r][-t] args" >&2; return;;
    -l) local list=1;;
    -r) local typ="rank";;
    -t) local typ="recent";;
@@ -75,8 +75,8 @@ z() {
    function output(files, toopen, override) {
     if( list ) {
      if( typ == "recent" ) {
-      cmd = "sort -nr >/dev/stderr"
-     } else cmd = "sort -n >/dev/stderr"
+      cmd = "sort -nr >&2"
+     } else cmd = "sort -n >&2"
      for( i in files ) if( files[i] ) printf "%-15s %s\n", files[i], i | cmd
      if( override ) printf "%-15s %s\n", "common:", override > "/dev/stderr"
     } else {
