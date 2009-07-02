@@ -64,7 +64,7 @@ z() {
   # if we hit enter on a completion just go there
   [ -d "$last" ] && cd "$last" && return
   [ -f "$datafile" ] || return
-  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -v tmpfl="$datafile.tmp" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
@@ -99,7 +99,7 @@ z() {
    BEGIN { split(q, a, " ") }
    {
     if( system("test -d \"" $1 "\"") ) next
-    print $0 >> FILENAME ".tmp"
+    print $0 >> tmpfl
     if( typ == "rank" ) {
      f = $2
     } else if( typ == "recent" ) {
