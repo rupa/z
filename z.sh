@@ -11,8 +11,8 @@
 # USE:
 #   * z foo     # goes to most frecent dir matching foo
 #   * z foo bar # goes to most frecent dir matching foo and bar
-#   * z -r rank # goes to highest ranked dir matching foo
-#   * z -t rank # goes to most recently accessed dir matching foo
+#   * z -r foo  # goes to highest ranked dir matching foo
+#   * z -t foo  # goes to most recently accessed dir matching foo
 #   * z -l foo  # list all dirs matching foo (by frecency)
 
 z() {
