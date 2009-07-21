@@ -124,8 +124,12 @@ z() {
     } else if( ncx ) output(nocase, ncx, common(nocase, a, 1))
    }
   ' $datafile)"
-  mv -f $datafile.tmp $datafile
-  [ "$cd" ] && cd "$cd"
+  if [ $? -gt 0 ]; then
+   rm -f $datafile.tmp
+  else
+   mv -f $datafile.tmp $datafile
+   [ "$cd" ] && cd "$cd"
+  fi
  fi
 }
 # tab completion
