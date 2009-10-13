@@ -1,8 +1,8 @@
 z is the new j
 
-First, there was [j](http://github.com/rupa/j/).
+First, there was j: http://github.com/rupa/j/.
 
-Then, there was [j2](http://github.com/rupa/j2/), with some python added. Made
+Then, there was j2: http://github.com/rupa/j2/, with some python added. Made
 it easier to experiment with some stuff I'd been thinking about.
 
 Now there's this, where I rewrote j2 back in bash. I like it. Sorry about all
