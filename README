@@ -8,6 +8,11 @@ it easier to experiment with some stuff I'd been thinking about.
 Now there's this, where I rewrote j2 back in bash. I like it. Sorry about all
 the repos , but it kind of grew this way.
 
+The biggest change from j is the use of 'frecency' for weighting. Directories
+that have low ranking but were accesed recently, will quickly have higher rank.
+
+The -r switch preserves the old behavior.
+
 # maintains a jump-list of the directories you actually use
 #
 # INSTALL:
