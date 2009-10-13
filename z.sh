@@ -77,8 +77,8 @@ z() {
      if( typ == "recent" ) {
       cmd = "sort -nr >&2"
      } else cmd = "sort -n >&2"
-     for( i in files ) if( files[i] ) printf "%-15s %s\n", files[i], i | cmd
-     if( override ) printf "%-15s %s\n", "common:", override > "/dev/stderr"
+     for( i in files ) if( files[i] ) printf "%-10s %s\n", files[i], i | cmd
+     if( override ) printf "%-10s %s\n", "common:", override > "/dev/stderr"
     } else {
      if( override ) toopen = override
      print toopen
