@@ -44,10 +44,19 @@ z() {
  elif [ "$1" = "--complete" ]; then
   # tab completion
   awk -v q="$2" -F"|" '
-   BEGIN { split(substr(q,3),fnd," ") }
+   BEGIN {
+    if( q == tolower(q) ) nocase = 1
+    split(substr(q,3),fnd," ")
+   }
    {
     if( system("test -d \"" $1 "\"") ) next
-    for( i in fnd ) tolower($1) !~ tolower(fnd[i]) && $1 = ""; if( $1 ) print $1
+    if( nocase ) {
+     for( i in fnd ) tolower($1) !~ tolower(fnd[i]) && $1 = ""
+     if( $1 ) print $1
+    } else {
+     for( i in fnd ) $1 !~ fnd[i] && $1 = ""
+     if( $1 ) print $1
+    }
    }
   ' $datafile 2>/dev/null
  else
