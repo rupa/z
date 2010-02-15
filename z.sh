@@ -47,7 +47,7 @@ z() {
    BEGIN { split(substr(q,3),fnd," ") }
    {
     if( system("test -d \"" $1 "\"") ) next
-    for( i in fnd ) $1 !~ fnd[i] && $1 = ""; if( $1 ) print $1
+    for( i in fnd ) tolower($1) !~ tolower(fnd[i]) && $1 = ""; if( $1 ) print $1
    }
   ' $datafile 2>/dev/null
  else
