@@ -16,7 +16,7 @@
 #   * z -l foo  # list all dirs matching foo (by frecency)
 
 z() {
- local datafile=$HOME/.z
+ local datafile="$HOME/.z"
  if [ "$1" = "--add" ]; then
   # add
   shift
