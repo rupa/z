@@ -16,18 +16,26 @@
 #   * z -l foo  # list all dirs matching foo (by frecency)
 
 z() {
+
  local datafile="$HOME/.z"
+
+ # add entries
  if [ "$1" = "--add" ]; then
-  # add
   shift
+
   # $HOME isn't worth matching
   [ "$*" = "$HOME" ] && return
-  awk -v p="$*" -v t="$(date +%s)" -F"|" '
-   BEGIN { rank[p] = 1; time[p] = t }
+
+  # maintain the file
+  awk -v path="$*" -v now="$(date +%s)" -F"|" '
+   BEGIN {
+    rank[path] = 1
+    time[path] = now
+   }
    $2 >= 1 {
-    if( $1 == p ) {
+    if( $1 == path ) {
      rank[$1] = $2 + 1
-     time[$1] = t
+     time[$1] = now
     } else {
      rank[$1] = $2
      time[$1] = $3
@@ -41,8 +49,9 @@ z() {
    }
   ' "$datafile" 2>/dev/null > "$datafile.tmp"
   mv -f "$datafile.tmp" "$datafile"
+
+ # tab completion
  elif [ "$1" = "--complete" ]; then
-  # tab completion
   awk -v q="$2" -F"|" '
    BEGIN {
     if( q == tolower(q) ) nocase = 1
@@ -59,6 +68,7 @@ z() {
     }
    }
   ' "$datafile" 2>/dev/null
+
  else
   # list/go
   while [ "$1" ]; do case "$1" in
@@ -70,9 +80,13 @@ z() {
     *) local fnd="$fnd $1";;
   esac; local last=$1; shift; done
   [ "$fnd" ] || local list=1
+
   # if we hit enter on a completion just go there
   [ -d "$last" ] && cd "$last" && return
+
+  # no file yet
   [ -f "$datafile" ] || return
+
   local cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -v tmpfl="$datafile.tmp" -F"|" '
    function frecent(rank, time) {
     dx = t-time
@@ -141,8 +155,10 @@ z() {
   fi
  fi
 }
-# tab completion
+
+# bash tab completion
 complete -C 'z --complete "$COMP_LINE"' z
+
 # populate directory list. avoid clobbering other PROMPT_COMMANDs.
 echo $PROMPT_COMMAND | grep -q "z --add"
-[ $? -gt 0 ] && PROMPT_COMMAND='z --add "$(pwd -P)";'"$PROMPT_COMMAND"
+[ $? -gt 0 ] && PROMPT_COMMAND='z --add "$(pwd -P 2>/dev/null)";'"$PROMPT_COMMAND"
