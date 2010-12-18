@@ -5,6 +5,11 @@
 # INSTALL:
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
+#   * put something like this in your .zshrc:
+#     . /path/to/z.sh
+#     function precmd () {
+#       z --add "$(pwd -P)"
+#     }
 #   * cd around for a while to build up the db
 #   * PROFIT!!
 #
@@ -156,8 +161,18 @@ z() {
  fi
 }
 
-# bash tab completion
-complete -C 'z --complete "$COMP_LINE"' z
+if complete &> /dev/null; then
+  # bash tab completion
+  complete -C 'z --complete "$COMP_LINE"' z
+elif compctl &> /dev/null; then
+  # zsh tab completion
+  _z_zsh_tab_completion() {
+    local compl
+    read -l compl
+    reply=(`z --complete "$compl"`)
+  }
+  compctl -U -K _z_zsh_tab_completion z
+fi
 
 # populate directory list. avoid clobbering other PROMPT_COMMANDs.
 echo $PROMPT_COMMAND | grep -q "z --add"

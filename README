@@ -18,6 +18,11 @@ The -r switch preserves the old behavior.
 # INSTALL:
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
+#   * put something like this in your .zshrc:
+#     . /path/to/z.sh
+#     function precmd () {
+#       z --add "$(pwd -P)"
+#     }
 #   * cd around for a while to build up the db
 #   * PROFIT!!
 #
