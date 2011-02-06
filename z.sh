@@ -54,7 +54,7 @@ z() {
     } else for( i in rank ) print i "|" rank[i] "|" time[i]
    }
   ' "$datafile" 2>/dev/null > "$tempfile"
-  mv -f "$tempfile" "$datafile"
+  env mv -f "$tempfile" "$datafile"
 
  # tab completion
  elif [ "$1" = "--complete" ]; then
@@ -155,9 +155,9 @@ z() {
    }
   ' "$datafile")"
   if [ $? -gt 0 ]; then
-   rm -f "$tempfile"
+   env rm -f "$tempfile"
   else
-   mv -f "$tempfile" "$datafile"
+   env mv -f "$tempfile" "$datafile"
    [ "$cd" ] && cd "$cd"
   fi
  fi
