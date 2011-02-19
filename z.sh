@@ -1,4 +1,5 @@
 #!/bin/bash
+# Copyright (c) 2009 rupa deadwyler under the WTFPL license
 
 # maintains a jump-list of the directories you actually use
 #
