@@ -14,11 +14,11 @@
 #   * PROFIT!!
 #
 # USE:
-#   * z foo     # cd to most frecent dir matching foo
-#   * z foo bar # cd to most frecent dir matching foo and bar
+#   * z foo     # cd to most frequent dir matching foo
+#   * z foo bar # cd to most frequent dir matching foo and bar
 #   * z -r foo  # cd to highest ranked dir matching foo
 #   * z -t foo  # cd to most recently accessed dir matching foo
-#   * z -l foo  # list all dirs matching foo (by frecency)
+#   * z -l foo  # list all dirs matching foo (by frequency)
 
 z() {
 
@@ -95,7 +95,7 @@ z() {
 
   local tempfile="$(mktemp $datafile.XXXXXX)" || return
   local cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -v tmpfl="$tempfile" -F"|" '
-   function frecent(rank, time) {
+   function frequent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
     if( dx < 86400 ) return rank*2
@@ -134,7 +134,7 @@ z() {
      f = $2
     } else if( typ == "recent" ) {
      f = t-$3
-    } else f = frecent($2, $3)
+    } else f = frequent($2, $3)
     wcase[$1] = nocase[$1] = f
     for( i in a ) {
      if( $1 !~ a[i] ) delete wcase[$1]
