@@ -1,34 +1,78 @@
-z is the new j
+Z(1)                             User Commands                            Z(1)
 
-First, there was j: http://github.com/rupa/j/.
 
-Then, there was j2: http://github.com/rupa/j2/, with some python added. Made
-it easier to experiment with some stuff I'd been thinking about.
 
-Now there's this, where I rewrote j2 back in bash. I like it. Sorry about all
-the repos , but it kind of grew this way.
+NAME
+       z - jump around
 
-The biggest change from j is the use of 'frecency' for weighting. Directories
-that have low ranking but were accessed recently, will quickly have higher rank.
 
-The -r switch preserves the old behavior.
+SYNOPSIS
+       z [-h] [-l] [-r] [-t] [regex1 regex2 ... regexn]
 
-# maintains a jump-list of the directories you actually use
-#
-# INSTALL:
-#   * put something like this in your .bashrc:
-#     . /path/to/z.sh
-#   * put something like this in your .zshrc:
-#     . /path/to/z.sh
-#     function precmd () {
-#       z --add "$(pwd -P)"
-#     }
-#   * cd around for a while to build up the db
-#   * PROFIT!!
-#
-# USE:
-#   * z foo     # cd to most frecent dir matching foo
-#   * z foo bar # cd to most frecent dir matching foo and bar
-#   * z -r foo  # cd to highest ranked dir matching foo
-#   * z -t foo  # cd to most recently accessed dir matching foo
-#   * z -l foo  # list all dirs matching foo (by frecency)
+
+AVAILABILITY
+       bash, zsh
+
+
+DESCRIPTION
+       Tracks your most used directories, based on 'frecency'.
+
+       After  a  short  learning  phase, z will take you to the most 'frecent'
+       directory that matches ALL of the regexes given on the command line.
+
+
+OPTIONS
+       -h show a brief help message
+       -l list only
+       -r match by rank only
+       -t match by recent access only
+
+
+EXAMPLES
+       z foo     cd to most frecent dir matching foo
+       z foo bar cd to most frecent dir matching foo and bar
+       z -r foo  cd to highest ranked dir matching foo
+       z -t foo  cd to most recently accessed dir matching foo
+       z -l foo  list all dirs matching foo (by frecency)
+
+
+NOTES
+       Installation:
+
+       put something like this in your $HOME/.bashrc:
+
+        . /path/to/z.sh
+
+       put something like this in your $HOME/.zshrc:
+
+        . /path/to/z.sh
+        function precmd () {
+          z --add "$(pwd -P)"
+        }
+
+       cd around for a while to build up the db.
+       PROFIT!!
+
+       Frecency:
+
+       Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted
+       rank  that depends on 'how often' and 'how recently' something occured.
+       As far as I know, Mozilla came up with the term.
+
+       In z, a directory that has low ranking but has been  accessed  recently
+       will  quickly  have  higher rank than a directory accessed frequently a
+       long time ago.
+
+
+FILES
+       data is stored in $HOME/.z
+
+
+SEE ALSO
+       regex(7), cdargs, pushd, popd, autojump, cdargs
+
+       Please file bugs at https://github.com/rupa/z/
+
+
+
+z                                February 2011                            Z(1)
