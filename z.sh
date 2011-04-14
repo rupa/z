@@ -168,7 +168,7 @@ if complete &> /dev/null; then
   complete -C 'z --complete "$COMP_LINE"' z
   # populate directory list. avoid clobbering other PROMPT_COMMANDs.
   echo $PROMPT_COMMAND | grep -q "z --add"
-  [ $? -gt 0 ] && PROMPT_COMMAND='z --add "$(pwd -P 2>/dev/null)";'"$PROMPT_COMMAND"
+  [ $? -gt 0 ] && PROMPT_COMMAND='z --add "$(pwd -P 2>/dev/null) 2>/dev/null";'"$PROMPT_COMMAND"
 elif compctl &> /dev/null; then
   # zsh tab completion
   _z_zsh_tab_completion() {
