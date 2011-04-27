@@ -25,7 +25,7 @@ z() {
  local datafile="$HOME/.z"
 
  # bail out if we don't own ~/.z (we're another user but our ENV is still set)
- [ -f "$datafile" -a "$(stat -c %U "$datafile")" != "$USER" ] && return
+ [ -f "$datafile" -a ! -O "$datafile" ] && return
 
  # add entries
  if [ "$1" = "--add" ]; then
