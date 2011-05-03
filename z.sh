@@ -177,7 +177,7 @@ elif compctl &> /dev/null; then
   _z_zsh_tab_completion() {
     local compl
     read -l compl
-    reply=(`z --complete "$compl"`)
+    reply=(${(f)"$(z --complete "$compl")"})
   }
   compctl -U -K _z_zsh_tab_completion z
 fi
