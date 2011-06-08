@@ -3,12 +3,14 @@
 # maintains a jump-list of the directories you actually use
 #
 # INSTALL:
+#   * optionally:
+#     set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
 #   * put something like this in your .zshrc:
 #     . /path/to/z.sh
 #     function precmd () {
-#       z --add "$(pwd -P)"
+#       _z --add "$(pwd -P)"
 #     }
 #   * cd around for a while to build up the db
 #   * PROFIT!!
@@ -20,7 +22,7 @@
 #   * z -t foo  # cd to most recently accessed dir matching foo
 #   * z -l foo  # list all dirs matching foo (by frecency)
 
-z() {
+_z() {
 
  local datafile="$HOME/.z"
 
@@ -166,18 +168,20 @@ z() {
  fi
 }
 
+alias ${_Z_CMD:-z}='_z 2>&1'
+
 if complete &> /dev/null; then
   # bash tab completion
-  complete -C 'z --complete "$COMP_LINE"' z
+  complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
   # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-  echo $PROMPT_COMMAND | grep -q "z --add"
-  [ $? -gt 0 ] && PROMPT_COMMAND='z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
+  echo $PROMPT_COMMAND | grep -q "_z --add"
+  [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
 elif compctl &> /dev/null; then
   # zsh tab completion
   _z_zsh_tab_completion() {
     local compl
     read -l compl
-    reply=(${(f)"$(z --complete "$compl")"})
+    reply=(${(f)"$(_z --complete "$compl")"})
   }
-  compctl -U -K _z_zsh_tab_completion z
+  compctl -U -K _z_zsh_tab_completion ${_Z_CMD:-z}
 fi
