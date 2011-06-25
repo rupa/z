@@ -37,7 +37,8 @@ _z() {
   [ "$*" = "$HOME" ] && return
 
   # maintain the file
-  local tempfile="$(mktemp $datafile.XXXXXX)" || return
+  local tempfile
+  tempfile="$(mktemp $datafile.XXXXXX)" || return
   awk -v path="$*" -v now="$(date +%s)" -F"|" '
    BEGIN {
     rank[path] = 1
@@ -98,8 +99,10 @@ _z() {
   # no file yet
   [ -f "$datafile" ] || return
 
-  local tempfile="$(mktemp $datafile.XXXXXX)" || return
-  local cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -v tmpfl="$tempfile" -F"|" '
+  local tempfile
+  tempfile="$(mktemp $datafile.XXXXXX)" || return
+  local cd
+  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -v tmpfl="$tempfile" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
