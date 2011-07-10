@@ -60,7 +60,7 @@ _z() {
     } else for( i in rank ) print i "|" rank[i] "|" time[i]
    }
   ' "$datafile" 2>/dev/null >| "$tempfile"
-  [ $? -eq 0 ] && env mv -f "$tempfile" "$datafile"
+  env mv -f "$tempfile" "$datafile"
 
  # tab completion
  elif [ "$1" = "--complete" ]; then
