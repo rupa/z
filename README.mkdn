@@ -1,0 +1,79 @@
+User Commands
+=============
+
+#### NAME ####
+
+       z - jump around
+
+
+#### SYNOPSIS ####
+       z [-h] [-l] [-r] [-t] [regex1 regex2 ... regexn]
+
+
+#### AVAILABILITY ####
+       bash, zsh
+
+
+#### DESCRIPTION ####
+Tracks your most used directories, based on 'frecency'.After a short learning phase, z will take you to the most 'frecent' directory that matches ALL of the regexes given on the command line.
+
+
+#### OPTIONS ####
+       -h show a brief help message
+       -l list only
+       -r match by rank only
+       -t match by recent access only
+
+
+#### EXAMPLES ####
+       z foo	 cd to most frecent dir matching foo
+       z foo bar cd to most frecent dir matching foo and bar
+       z -r foo	 cd to highest ranked dir matching foo
+       z -t foo	 cd to most recently accessed dir matching foo
+       z -l foo	 list all dirs matching foo (by frecency)
+
+
+####  NOTES  ####
+##### Installation: #####
+
+**optionally:**
+Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+
+Put something like this in your $HOME/.bashrc:
+
+    . /path/to/z.sh
+
+Put something like this in your $HOME/.zshrc:
+
+    . /path/to/z.sh
+    function precmd () {
+      _z --add "$(pwd -P)"
+    }
+
+cd around for a while to build up the db.
+
+***PROFIT!!***
+
+**"Frecency":**
+
+Frecency is a portmantaeu of 'recent' and 'frequency'. It is weighted rank  that depends on how often and how recently something occured. As far as I know, Mozilla came up with the term. In z, a directory that has low ranking but has been accessed recently will quickly have higher rank than a directory accessed frequently a long time ago.
+
+
+##### ENVIRONMENT #####
+A function _z() is defined.
+
+An alias $_Z_CMD='_z 2>&1' is defined. If not set, $_Z_CMD defaults to z.
+
+
+#### FILES ####
+Data is stored in $HOME/.z
+
+
+#### SEE ALSO ####
+       regex(7), cdargs, pushd, popd, autojump, cdargs
+
+Please file bugs at https://github.com/rupa/z/
+
+
+
+February 2011
