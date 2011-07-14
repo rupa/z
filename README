@@ -57,6 +57,9 @@ NOTES
 
        PROFIT!!
 
+       optionally:
+	install the provided man page z.1 somewhere like /usr/local/man/man1.
+
        Frecency:
 
        Frecency is a portmantaeu of 'recent' and 'frequency'. It  is  a	 weighted
@@ -76,6 +79,8 @@ ENVIRONMENT
 
 FILES
        data is stored in $HOME/.z
+
+       A man page (z.1) is provided.
 
 
 SEE ALSO
