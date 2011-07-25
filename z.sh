@@ -98,7 +98,8 @@ _z() {
   [ "$fnd" ] || local list=1
 
   # if we hit enter on a completion just go there
-  [ -d "$last" ] && cd "$last" && return
+  # completions will always start with /
+  [ -z "$list" -a -d "$last" -a "${last:0:1}" = "/" ] && cd "$last" && return
 
   # no file yet
   [ -f "$datafile" ] || return
