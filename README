@@ -70,6 +70,17 @@ NOTES
        quickly	have higher rank than a directory accessed frequently a long time
        ago.
 
+       Tab Completion
+
+       z supports tab completion. After any number of  arguments,  press  TAB  to
+       complete	 on  directories  that match each argument. Due to limitations of
+       the completion implementations, only the last argument will  be	completed
+       in the shell.
+
+       Internally,  z  decides you've requested a completion if the last argument
+       passed is an absolute path to an existing directory. This may cause  unex‐
+       pected behavior if the last argument to z begins with /.
+
 
 ENVIRONMENT
        A function _z() is defined.

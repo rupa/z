@@ -72,6 +72,18 @@ will quickly have higher rank than a directory accessed frequently a long time
 ago.
 .br
 
+\fBTab Completion\fR
+.P
+\fBz\fR supports tab completion. After any number of arguments, press TAB to
+complete on directories that match each argument. Due to limitations of the
+completion implementations, only the last argument will be completed in the
+shell.
+.P
+Internally, \fBz\fR decides you've requested a completion if the last argument
+passed is an absolute path to an existing directory. This may cause unexpected
+behavior if the last argument to \fBz\fR begins with \fB/\fR.
+.br
+
 .SH ENVIRONMENT
 A function \fB_z()\fR is defined.
 .P
