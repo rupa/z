@@ -127,17 +127,15 @@ _z() {
      print toopen
     }
    }
-   function common(matches, fnd, nc) {
+   function common(matches) {
+    # shortest match
     for( i in matches ) {
      if( matches[i] && (!short || length(i) < length(short)) ) short = i
     }
     if( short == "/" ) return
-    for( i in matches ) if( matches[i] && i !~ short ) x = 1
-    if( x ) return
-    if( nc ) {
-     for( i in fnd ) if( tolower(short) !~ tolower(fnd[i]) ) x = 1
-    } else for( i in fnd ) if( short !~ fnd[i] ) x = 1
-    if( !x ) return short
+    # shortest match must be common to each match
+    for( i in matches ) if( matches[i] && i !~ short ) return
+    return short
    }
    BEGIN { split(q, a, " ") }
    {
@@ -162,8 +160,8 @@ _z() {
    }
    END {
     if( cx ) {
-     output(wcase, cx, common(wcase, a, 0))
-    } else if( ncx ) output(nocase, ncx, common(nocase, a, 1))
+     output(wcase, cx, common(wcase))
+    } else if( ncx ) output(nocase, ncx, common(nocase))
    }
   ' "$datafile")"
   [ $? -gt 0 ] && return
