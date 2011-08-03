@@ -132,7 +132,12 @@ _z() {
      if( matches[i] && (!short || length(i) < length(short)) ) short = i
     }
     if( short == "/" ) return
-    return short
+    for( i in matches ) if( matches[i] && i !~ short ) x = 1
+    if( x ) return
+    if( nc ) {
+     for( i in fnd ) if( tolower(short) !~ tolower(fnd[i]) ) x = 1
+    } else for( i in fnd ) if( short !~ fnd[i] ) x = 1
+    if( !x ) return short
    }
    BEGIN { split(q, a, " ") }
    {
