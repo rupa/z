@@ -172,17 +172,17 @@ _z() {
 alias ${_Z_CMD:-z}='_z 2>&1'
 
 if complete &> /dev/null; then
-  # bash tab completion
-  complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
-  # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-  echo $PROMPT_COMMAND | grep -q "_z --add"
-  [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
+ # bash tab completion
+ complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
+ # populate directory list. avoid clobbering other PROMPT_COMMANDs.
+ echo $PROMPT_COMMAND | grep -q "_z --add"
+ [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
 elif compctl &> /dev/null; then
-  # zsh tab completion
-  _z_zsh_tab_completion() {
-    local compl
-    read -l compl
-    reply=(${(f)"$(_z --complete "$compl")"})
-  }
-  compctl -U -K _z_zsh_tab_completion _z
+ # zsh tab completion
+ _z_zsh_tab_completion() {
+  local compl
+  read -l compl
+  reply=(${(f)"$(_z --complete "$compl")"})
+ }
+ compctl -U -K _z_zsh_tab_completion _z
 fi
