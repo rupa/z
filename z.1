@@ -61,15 +61,33 @@ optionally:
  install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fB.
 .br
 
+\fBAging:\fR
+.P
+The rank of directories maintained by \fBz\fR undergoes aging based on a simple
+formula. Each the rank of each entry is incremented by 1 every time it is
+accessed. When the sum total of ranks is greater than 1000, all ranks are
+multiplied by 0.9. Entries with a rank lower than 1 are forgotten.
+.br
+
 \fBFrecency:\fR
 .P
 Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted rank
 that depends on how often and how recently something occured. As far as I
 know, Mozilla came up with the term.
 .P
-In \fBz\fR, a directory that has low ranking but has been accessed recently
+To \fBz\fR, a directory that has low ranking but has been accessed recently
 will quickly have higher rank than a directory accessed frequently a long time
 ago.
+
+Frecency is determined at runtime.
+.br
+
+\fBCommon:\fR
+.P
+When multiple directories match all queries, \fBz\fR will cd to the shortest
+matching directory, without regard to priority. This has been in effect, if
+undocumented, for quite some time, and it is the opinion of the author that it
+is intuitive behavior.
 .br
 
 \fBTab Completion\fR
