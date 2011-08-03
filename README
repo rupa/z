@@ -63,9 +63,9 @@ NOTES
        Aging:
 
        The rank of directories maintained by z undergoes aging based on a  simple
-       formula.	 The  rank  of	each  entry  is incremented by 1 every time it is
-       accessed. When the sum total of ranks is greater than 1000, all ranks  are
-       multiplied by 0.9. Entries with a rank lower than 1 are forgotten.
+       formula.	 The rank of each entry is incremented every time it is accessed.
+       When the sum of ranks is greater than 1000, all ranks  are  multiplied  by
+       0.9. Entries with a rank lower than 1 are forgotten.
 
        Frecency:
 
