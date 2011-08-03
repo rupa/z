@@ -77,11 +77,10 @@ _z() {
     if( system("test -d \"" $1 "\"") ) next
     if( nocase ) {
      for( i in fnd ) tolower($1) !~ tolower(fnd[i]) && $1 = ""
-     if( $1 ) print $1
     } else {
      for( i in fnd ) $1 !~ fnd[i] && $1 = ""
-     if( $1 ) print $1
     }
+    if( $1 ) print $1
    }
   ' "$datafile" 2>/dev/null
 
