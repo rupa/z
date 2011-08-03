@@ -106,10 +106,8 @@ _z() {
   # no file yet
   [ -f "$datafile" ] || return
 
-  local tempfile
-  tempfile="$(mktemp $datafile.XXXXXX)" || return
   local cd
-  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -v tmpfl="$tempfile" -F"|" '
+  cd="$(awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
@@ -134,17 +132,11 @@ _z() {
      if( matches[i] && (!short || length(i) < length(short)) ) short = i
     }
     if( short == "/" ) return
-    for( i in matches ) if( matches[i] && i !~ short ) x = 1
-    if( x ) return
-    if( nc ) {
-     for( i in fnd ) if( tolower(short) !~ tolower(fnd[i]) ) x = 1
-    } else for( i in fnd ) if( short !~ fnd[i] ) x = 1
-    if( !x ) return short
+    return short
    }
    BEGIN { split(q, a, " ") }
    {
     if( system("test -d \"" $1 "\"") ) next
-    print $0 >> tmpfl
     if( typ == "rank" ) {
      f = $2
     } else if( typ == "recent" ) {
@@ -169,12 +161,8 @@ _z() {
     } else if( ncx ) output(nocase, ncx, common(nocase, a, 1))
    }
   ' "$datafile")"
-  if [ $? -gt 0 ]; then
-   env rm -f "$tempfile"
-  else
-   env mv -f "$tempfile" "$datafile"
-   [ "$cd" ] && cd "$cd"
-  fi
+  [ $? -gt 0 ] && return
+  [ "$cd" ] && cd "$cd"
  fi
 }
 

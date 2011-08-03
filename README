@@ -83,8 +83,8 @@ NOTES
 
        When  multiple  directories  match  all queries, z will cd to the shortest
        matching directory, without regard to priority. This has been  in  effect,
-       if  undocumented, for quite some time, and it is the opinion of the author
-       that it is intuitive behavior.
+       if  undocumented, for quite some time, but should probably be configurable
+       or reconsidered.
 
        Tab Completion
 
