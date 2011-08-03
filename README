@@ -81,10 +81,10 @@ NOTES
 
        Common:
 
-       When  multiple  directories  match  all queries, z will cd to the shortest
-       matching directory, without regard to priority. This has been  in  effect,
-       if  undocumented, for quite some time, but should probably be configurable
-       or reconsidered.
+       When  multiple  directories  match all queries, and they all have a common
+       prefix, z will cd to the shortest matching directory,  without  regard  to
+       priority.   This has been in effect, if undocumented, for quite some time,
+       but should probably be configurable or reconsidered.
 
        Tab Completion
 
