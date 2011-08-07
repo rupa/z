@@ -39,14 +39,15 @@ EXAMPLES
 NOTES
        Installation:
 
-       optionally:
-	set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+       Optionally:
+	Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+	Set $_Z_DATA to change the datafile (default $HOME/.z).
 
-       put something like this in your $HOME/.bashrc:
+       Put something like this in your $HOME/.bashrc:
 
 	. /path/to/z.sh
 
-       put something like this in your $HOME/.zshrc:
+       Put something like this in your $HOME/.zshrc:
 
 	. /path/to/z.sh
 	function precmd () {
@@ -57,8 +58,8 @@ NOTES
 
        PROFIT!!
 
-       optionally:
-	install the provided man page z.1 somewhere like /usr/local/man/man1.
+       Optionally:
+	Install the provided man page z.1 somewhere like /usr/local/man/man1.
 
        Aging:
 
@@ -105,7 +106,7 @@ ENVIRONMENT
 
 
 FILES
-       data is stored in $HOME/.z
+       Data is stored in $_Z_DATA. If not set, $_Z_DATA defaults to $HOME/.z
 
        A man page (z.1) is provided.
 

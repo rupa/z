@@ -5,6 +5,7 @@
 # INSTALL:
 #   * optionally:
 #     set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+#     set $_Z_DATA in .bashrc/.zshrc to change the datafile (default ~/.z).
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
 #   * put something like this in your .zshrc:
@@ -24,7 +25,7 @@
 
 _z() {
 
- local datafile="$HOME/.z"
+ local datafile="${_Z_DATA:-$HOME/.z}"
 
  # bail out if we don't own ~/.z (we're another user but our ENV is still set)
  [ -f "$datafile" -a ! -O "$datafile" ] && return
