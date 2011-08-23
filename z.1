@@ -109,6 +109,14 @@ A function \fB_z()\fR is defined.
 .P
 An alias \fB$_Z_CMD\fR='_z 2>&1' is defined. If not set, \fB$_Z_CMD\fR defaults
 to \fBz\fR.
+.P
+In bash, \fBz\fR uses the \fBPROMPT_COMMAND\fR environment variable to maintain
+its database. Specifically it prepends:
+.P
+ \fB_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;\fR
+.P
+to any existing \fbPROMPT_COMMAND\fR. zsh users need to manually set
+\fBprecmd()\fR as described in the installation instructions.
 
 .SH FILES
 Data is stored in \fB$_Z_DATA\fR. If not set, \fB$_Z_DATA\fR defaults to

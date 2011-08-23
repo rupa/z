@@ -104,6 +104,14 @@ ENVIRONMENT
 
        An alias $_Z_CMD='_z 2>&1' is defined. If not set, $_Z_CMD defaults to z.
 
+       In  bash,  z  uses the PROMPT_COMMAND environment variable to maintain its
+       database. Specifically it prepends:
+
+	_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;
+
+       to any existing PROMPT_COMMAND. zsh users need to manually set precmd() as
+       described in the installation instructions.
+
 
 FILES
        Data is stored in $_Z_DATA. If not set, $_Z_DATA defaults to $HOME/.z
