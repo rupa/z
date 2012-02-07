@@ -69,7 +69,7 @@ _z() {
 
  # tab completion
  elif [ "$1" = "--complete" ]; then
-  awk -v q="$2" -F"|" '
+  awk -v q="$2" -v datafile="$datafile" -F"|" '
    function notdir(path, tmp) {
     # faster than system()
     n = gsub("/+", "/", path)
