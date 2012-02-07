@@ -92,7 +92,7 @@ _z() {
     } else {
      for( i in fnd ) $1 !~ fnd[i] && $1 = ""
     }
-    if( $1 ) print $1
+    if( $1 ) print "\"" $1 "\""
    }
   ' "$datafile" 2>/dev/null
 
@@ -154,6 +154,10 @@ _z() {
      if( matches[i] && (!short || length(i) < length(short)) ) short = i
     }
     if( short == "/" ) return
+
+    # escape regex chars in right hand side
+    #gsub(/[\(\[\|]/, "\\\&", short)
+
     # shortest match must be common to each match
     for( i in matches ) if( matches[i] && i !~ short ) return
     return short
