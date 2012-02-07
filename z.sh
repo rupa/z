@@ -40,12 +40,24 @@ _z() {
   # maintain the file
   local tempfile
   tempfile="$(mktemp $datafile.XXXXXX)" || return
-  awk -v path="$*" -v now="$(date +%s)" -F"|" '
+  awk -v path="$*" -v now="$(date +%s)" -v datafile="$datafile" -F"|" '
+   function notdir(path, tmp) {
+    # faster than system()
+    n = gsub("/+", "/", path)
+    for( i = 0; i < n; i++ ) path = path "/.."
+    path = path datafile
+    if( ( getline tmp < path ) >= 0 ) {
+      close(path)
+      return 0
+    }
+    return 1
+   }
    BEGIN {
     rank[path] = 1
     time[path] = now
    }
    $2 >= 1 {
+    if( notdir($1) ) next
     if( $1 == path ) {
      rank[$1] = $2 + 1
      time[$1] = now
