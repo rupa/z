@@ -104,7 +104,7 @@ _z() {
     } else {
      for( i in fnd ) $1 !~ fnd[i] && $1 = ""
     }
-    if( $1 ) print "\"" $1 "\""
+    if( $1 ) print $1
    }
   ' "$datafile" 2>/dev/null
 
