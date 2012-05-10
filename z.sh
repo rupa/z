@@ -29,6 +29,11 @@ _z() {
 
  # bail out if we don't own ~/.z (we're another user but our ENV is still set)
  [ -f "$datafile" -a ! -O "$datafile" ] && return
+ # Index subdirectories
+ if [ "$1" = "--index"]; then
+  find `pwd` -type d | while read line
+  do _z --add $line
+ done
 
  # add entries
  if [ "$1" = "--add" ]; then
