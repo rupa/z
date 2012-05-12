@@ -22,6 +22,7 @@
 #   * z -r foo  # cd to highest ranked dir matching foo
 #   * z -t foo  # cd to most recently accessed dir matching foo
 #   * z -l foo  # list all dirs matching foo (by frecency)
+#   * z --index # index all subdirectories of the current dir
 
 _z() {
 
@@ -29,6 +30,11 @@ _z() {
 
  # bail out if we don't own ~/.z (we're another user but our ENV is still set)
  [ -f "$datafile" -a ! -O "$datafile" ] && return
+ # Index subdirectories
+ 
+if [ "$1" = "--index" ]; then
+  find '`pwd`' -type d -exec z --add \'\{\}\' \;
+fi
 
  # add entries
  if [ "$1" = "--add" ]; then
