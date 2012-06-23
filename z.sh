@@ -40,9 +40,9 @@ _z() {
   # maintain the file
   local tempfile
   tempfile="$(mktemp $datafile.XXXXXX)" || return
-  cat "$datafile" | while read line; do
+  while read line; do
    [ -d "${line%%\|*}" ] && echo $line
-  done | awk -v path="$*" -v now="$(date +%s)" -F"|" '
+  done < "$datafile" | awk -v path="$*" -v now="$(date +%s)" -F"|" '
    BEGIN {
     rank[path] = 1
     time[path] = now
@@ -71,9 +71,9 @@ _z() {
 
  # tab completion
  elif [ "$1" = "--complete" ]; then
-  cat "$datafile" | while read line; do
+  while read line; do
    [ -d "${line%%\|*}" ] && echo $line
-  done | awk -v q="$2" -F"|" '
+  done < "$datafile" | awk -v q="$2" -F"|" '
    BEGIN {
     if( q == tolower(q) ) nocase = 1
     split(substr(q,3),fnd," ")
@@ -110,9 +110,9 @@ _z() {
   [ -f "$datafile" ] || return
 
   local cd
-  cd="$(cat "$datafile" | while read line; do
+  cd="$(while read line; do
    [ -d "${line%%\|*}" ] && echo $line
-  done | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+  done < "$datafile" | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
    function frecent(rank, time) {
     dx = t-time
     if( dx < 3600 ) return rank*4
