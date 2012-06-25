@@ -43,6 +43,10 @@ Optionally:
  Set \fB$_Z_CMD\fR in .bashrc/.zshrc to change the command (default \fBz\fR).
 .br
  Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
+.br
+ Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
+.br
+ (These settings should go before the lines below.)
 .P
 Put something like this in your \fB$HOME/.bashrc\fR:
 .P
@@ -110,6 +114,13 @@ A function \fB_z()\fR is defined.
 An alias \fB$_Z_CMD\fR='_z 2>&1' is defined. If not set, \fB$_Z_CMD\fR defaults
 to \fBz\fR.
 .P
+The environment variable \fB$_Z_DATA\fR can be used to control the datafile
+location. If it is not defined, the location defaults to \fB$HOME/.z\fR.
+.P
+The environment variable \fB$_Z_NO_RESOLVE_SYMLINKS\fR can be set to prevent
+resolving of symlinks. If it is not set, symbolic links will be resolved when
+added to the datafile.
+.P
 In bash, \fBz\fR uses the \fBPROMPT_COMMAND\fR environment variable to maintain
 its database. Specifically it prepends:
 .P
@@ -119,8 +130,8 @@ to any existing \fbPROMPT_COMMAND\fR. zsh users need to manually set
 \fBprecmd()\fR as described in the installation instructions.
 
 .SH FILES
-Data is stored in \fB$_Z_DATA\fR. If not set, \fB$_Z_DATA\fR defaults to
-\fB$HOME/.z\fR
+Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the
+\fB$_Z_DATA\fR environment variable.
 .P
 A man page (\fBz.1\fR) is provided.
 

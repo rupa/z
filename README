@@ -1,4 +1,4 @@
-Z(1)				  User Commands				     Z(1)
+Z(1)                             User Commands                            Z(1)
 
 
 
@@ -17,8 +17,8 @@ AVAILABILITY
 DESCRIPTION
        Tracks your most used directories, based on 'frecency'.
 
-       After a short learning phase, z will take you to the most 'frecent' direc‐
-       tory that matches ALL of the regexes given on the command line.
+       After  a  short  learning  phase, z will take you to the most 'frecent'
+       directory that matches ALL of the regexes given on the command line.
 
 
 OPTIONS
@@ -29,92 +29,103 @@ OPTIONS
 
 
 EXAMPLES
-       z foo	 cd to most frecent dir matching foo
+       z foo     cd to most frecent dir matching foo
        z foo bar cd to most frecent dir matching foo and bar
-       z -r foo	 cd to highest ranked dir matching foo
-       z -t foo	 cd to most recently accessed dir matching foo
-       z -l foo	 list all dirs matching foo (by frecency)
+       z -r foo  cd to highest ranked dir matching foo
+       z -t foo  cd to most recently accessed dir matching foo
+       z -l foo  list all dirs matching foo (by frecency)
 
 
 NOTES
        Installation:
 
        Optionally:
-	Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
-	Set $_Z_DATA to change the datafile (default $HOME/.z).
+        Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+        Set $_Z_DATA to change the datafile (default $HOME/.z).
+        Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
+        (These settings should go before the lines below.)
 
        Put something like this in your $HOME/.bashrc:
 
-	. /path/to/z.sh
+        . /path/to/z.sh
 
        Put something like this in your $HOME/.zshrc:
 
-	. /path/to/z.sh
-	function precmd () {
-	  _z --add "$(pwd -P)"
-	}
+        . /path/to/z.sh
+        function precmd () {
+          _z --add "$(pwd -P)"
+        }
 
        cd around for a while to build up the db.
 
        PROFIT!!
 
        Optionally:
-	Install the provided man page z.1 somewhere like /usr/local/man/man1.
+        Install the provided man page z.1 somewhere like /usr/local/man/man1.
 
        Aging:
 
-       The rank of directories maintained by z undergoes aging based on a  simple
-       formula.	 The rank of each entry is incremented every time it is accessed.
-       When the sum of ranks is greater than 1000, all ranks  are  multiplied  by
-       0.9. Entries with a rank lower than 1 are forgotten.
+       The rank of directories maintained by z undergoes aging based on a sim‐
+       ple  formula.  The  rank  of each entry is incremented every time it is
+       accessed. When the sum of ranks is greater than  1000,  all  ranks  are
+       multiplied by 0.9. Entries with a rank lower than 1 are forgotten.
 
        Frecency:
 
-       Frecency	 is  a	portmantaeu of 'recent' and 'frequency'. It is a weighted
-       rank that depends on how often and how recently something occured. As  far
-       as I know, Mozilla came up with the term.
+       Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted
+       rank that depends on how often and how recently something  occured.  As
+       far as I know, Mozilla came up with the term.
 
-       To z, a directory that has low ranking but has been accessed recently will
-       quickly have higher rank than a directory accessed frequently a long  time
-       ago.
+       To  z,  a directory that has low ranking but has been accessed recently
+       will quickly have higher rank than a directory  accessed  frequently  a
+       long time ago.
 
        Frecency is determined at runtime.
 
        Common:
 
-       When  multiple  directories  match all queries, and they all have a common
-       prefix, z will cd to the shortest matching directory,  without  regard  to
-       priority.   This has been in effect, if undocumented, for quite some time,
-       but should probably be configurable or reconsidered.
+       When multiple directories match all queries, and they all have a common
+       prefix, z will cd to the shortest matching directory, without regard to
+       priority.   This  has  been  in effect, if undocumented, for quite some
+       time, but should probably be configurable or reconsidered.
 
        Tab Completion
 
-       z supports tab completion. After any number of  arguments,  press  TAB  to
-       complete	 on  directories  that match each argument. Due to limitations of
-       the completion implementations, only the last argument will  be	completed
-       in the shell.
+       z supports tab completion. After any number of arguments, press TAB  to
+       complete on directories that match each argument. Due to limitations of
+       the completion implementations, only the last  argument  will  be  com‐
+       pleted in the shell.
 
-       Internally,  z  decides you've requested a completion if the last argument
-       passed is an absolute path to an existing directory. This may cause  unex‐
-       pected behavior if the last argument to z begins with /.
+       Internally,  z  decides you've requested a completion if the last argu‐
+       ment passed is an absolute path to  an  existing  directory.  This  may
+       cause unexpected behavior if the last argument to z begins with /.
 
 
 ENVIRONMENT
        A function _z() is defined.
 
-       An alias $_Z_CMD='_z 2>&1' is defined. If not set, $_Z_CMD defaults to z.
+       An  alias $_Z_CMD='_z 2>&1' is defined. If not set, $_Z_CMD defaults to
+       z.
 
-       In  bash,  z  uses the PROMPT_COMMAND environment variable to maintain its
+       The environment variable $_Z_DATA can be used to control  the  datafile
+       location. If it is not defined, the location defaults to $HOME/.z.
+
+       The  environment variable $_Z_NO_RESOLVE_SYMLINKS can be set to prevent
+       resolving of symlinks. If  it  is  not  set,  symbolic  links  will  be
+       resolved when added to the datafile.
+
+       In bash, z uses the PROMPT_COMMAND environment variable to maintain its
        database. Specifically it prepends:
 
-	_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;
+        _z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;
 
-       to any existing PROMPT_COMMAND. zsh users need to manually set precmd() as
-       described in the installation instructions.
+       to any existing PROMPT_COMMAND. zsh users need to manually set precmd()
+       as described in the installation instructions.
 
 
 FILES
-       Data is stored in $_Z_DATA. If not set, $_Z_DATA defaults to $HOME/.z
+       Data  is  stored  in  $HOME/.z.  This  can be overridden by setting the
+       $_Z_DATA environment variable.
 
        A man page (z.1) is provided.
 
@@ -126,4 +137,4 @@ SEE ALSO
 
 
 
-z				  February 2011				     Z(1)
+z                                February 2011                            Z(1)

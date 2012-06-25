@@ -179,12 +179,14 @@ _z() {
 
 alias ${_Z_CMD:-z}='_z 2>&1'
 
+[ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
+
 if complete &> /dev/null; then
  # bash tab completion
  complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
  # populate directory list. avoid clobbering other PROMPT_COMMANDs.
  echo $PROMPT_COMMAND | grep -q "_z --add"
- [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
+ [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
 elif compctl &> /dev/null; then
  # zsh tab completion
  _z_zsh_tab_completion() {
