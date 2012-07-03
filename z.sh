@@ -6,6 +6,8 @@
 #   * optionally:
 #     set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
 #     set $_Z_DATA in .bashrc/.zshrc to change the datafile (default ~/.z).
+#     set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
+#     set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
 #   * put something like this in your .zshrc:
@@ -184,9 +186,11 @@ alias ${_Z_CMD:-z}='_z 2>&1'
 if complete &> /dev/null; then
  # bash tab completion
  complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
- # populate directory list. avoid clobbering other PROMPT_COMMANDs.
- echo $PROMPT_COMMAND | grep -q "_z --add"
- [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
+ [ "$_Z_NO_PROMPT_COMMAND" ] || {
+  # populate directory list. avoid clobbering other PROMPT_COMMANDs.
+  echo $PROMPT_COMMAND | grep -q "_z --add"
+  [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
+ }
 elif compctl &> /dev/null; then
  # zsh tab completion
  _z_zsh_tab_completion() {

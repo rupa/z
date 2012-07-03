@@ -43,6 +43,7 @@ NOTES
         Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
         Set $_Z_DATA to change the datafile (default $HOME/.z).
         Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
+        Set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
         (These settings should go before the lines below.)
 
        Put something like this in your $HOME/.bashrc:
@@ -122,9 +123,12 @@ ENVIRONMENT
        to any existing PROMPT_COMMAND. zsh users need to manually set precmd()
        as described in the installation instructions.
 
+       The  environment  variable $_Z_NO_PROMPT_COMMAND can be set if you want
+       to handle PROMPT_COMMAND yourself.
+
 
 FILES
-       Data  is  stored  in  $HOME/.z.  This  can be overridden by setting the
+       Data is stored in $HOME/.z. This  can  be  overridden  by  setting  the
        $_Z_DATA environment variable.
 
        A man page (z.1) is provided.
