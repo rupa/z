@@ -52,6 +52,8 @@ NOTES
 
        cd around for a while to build up the db.
 
+       PROFIT!!
+
        Optionally:
         Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
         Set $_Z_DATA to change the datafile (default $HOME/.z).
@@ -59,8 +61,6 @@ NOTES
         Set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
         (These settings should go before the lines above.)
         Install the provided man page z.1 somewhere like /usr/local/man/man1.
-
-       PROFIT!!
 
        Aging:
 
