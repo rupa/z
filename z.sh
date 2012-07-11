@@ -3,11 +3,6 @@
 # maintains a jump-list of the directories you actually use
 #
 # INSTALL:
-#   * optionally:
-#     set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
-#     set $_Z_DATA in .bashrc/.zshrc to change the datafile (default ~/.z).
-#     set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
-#     set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #   * put something like this in your .bashrc:
 #     . /path/to/z.sh
 #   * put something like this in your .zshrc:
@@ -17,6 +12,11 @@
 #     }
 #   * cd around for a while to build up the db
 #   * PROFIT!!
+#   * optionally:
+#     set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+#     set $_Z_DATA in .bashrc/.zshrc to change the datafile (default ~/.z).
+#     set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
+#     set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #
 # USE:
 #   * z foo     # cd to most frecent dir matching foo

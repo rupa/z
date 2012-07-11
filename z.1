@@ -39,17 +39,6 @@ directory that matches ALL of the regexes given on the command line.
 
 \fBInstallation:\fR
 .P
-Optionally:
- Set \fB$_Z_CMD\fR in .bashrc/.zshrc to change the command (default \fBz\fR).
-.br
- Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
-.br
- Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
-.br
- Set \fB$_Z_NO_PROMPT_COMMAND\fR if you're handling \fBPROMPT_COMMAND\fR yourself.
-.br
- (These settings should go before the lines below.)
-.P
 Put something like this in your \fB$HOME/.bashrc\fR:
 .P
  \fB. /path/to/z.sh\fR
@@ -66,9 +55,18 @@ Put something like this in your \fB$HOME/.zshrc\fR:
 PROFIT!!
 .P
 Optionally:
- Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fB.
+ Set \fB$_Z_CMD\fR in .bashrc/.zshrc to change the command (default \fBz\fR).
 .br
-
+ Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
+.br
+ Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
+.br
+ Set \fB$_Z_NO_PROMPT_COMMAND\fR if you're handling \fBPROMPT_COMMAND\fR yourself.
+.br
+ (These settings should go before the lines added above.)
+.br
+ Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fB.
+.P
 \fBAging:\fR
 .P
 The rank of directories maintained by \fBz\fR undergoes aging based on a simple
