@@ -39,13 +39,6 @@ EXAMPLES
 NOTES
        Installation:
 
-       Optionally:
-        Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
-        Set $_Z_DATA to change the datafile (default $HOME/.z).
-        Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
-        Set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
-        (These settings should go before the lines below.)
-
        Put something like this in your $HOME/.bashrc:
 
         . /path/to/z.sh
@@ -62,6 +55,11 @@ NOTES
        PROFIT!!
 
        Optionally:
+        Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
+        Set $_Z_DATA to change the datafile (default $HOME/.z).
+        Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
+        Set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
+        (These should go before the lines added in the Installation section.)
         Install the provided man page z.1 somewhere like /usr/local/man/man1.
 
        Aging:
