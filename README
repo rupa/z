@@ -58,12 +58,9 @@ NOTES
         Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
         Set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
         (These settings should go before the lines above.)
-
+        Install the provided man page z.1 somewhere like /usr/local/man/man1.
 
        PROFIT!!
-
-       Optionally:
-        Install the provided man page z.1 somewhere like /usr/local/man/man1.
 
        Aging:
 
