@@ -142,7 +142,7 @@ _z() {
     if( short == "/" ) return
 
     # escape regex chars in right hand side
-    gsub(/[\(\[\|]/, "\\&", short)
+    gsub(/[\(\)\[\]\|]/, "\\\&", short)
 
     # shortest match must be common to each match
     for( i in matches ) if( matches[i] && i !~ short ) return
