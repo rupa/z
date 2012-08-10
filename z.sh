@@ -86,10 +86,7 @@ _z() {
     } else {
      for( i in fnd ) $1 !~ fnd[i] && $1 = ""
     }
-    if( $1 ) {
-     gsub(/[\(\)\[\]\| ]/, "\\\\&", $1)
-     print $1
-    }
+    if( $1 ) print $1
    }
   ' 2>/dev/null
 
@@ -187,7 +184,7 @@ alias ${_Z_CMD:-z}='_z 2>&1'
 
 if complete &> /dev/null; then
  # bash tab completion
- complete -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
+ complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
  [ "$_Z_NO_PROMPT_COMMAND" ] || {
   # populate directory list. avoid clobbering other PROMPT_COMMANDs.
   echo $PROMPT_COMMAND | grep -q "_z --add"
@@ -200,5 +197,5 @@ elif compctl &> /dev/null; then
   read -l compl
   reply=(${(f)"$(_z --complete "$compl")"})
  }
- compctl -Q -U -K _z_zsh_tab_completion _z
+ compctl -U -K _z_zsh_tab_completion _z
 fi
