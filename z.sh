@@ -86,7 +86,10 @@ _z() {
     } else {
      for( i in fnd ) $1 !~ fnd[i] && $1 = ""
     }
-    if( $1 ) print $1
+    if( $1 ) {
+     gsub(/[\(\)\[\]\| ]/, "\\\\&", $1)
+     print $1
+    }
    }
   ' 2>/dev/null
 
@@ -140,12 +143,11 @@ _z() {
      if( matches[i] && (!short || length(i) < length(short)) ) short = i
     }
     if( short == "/" ) return
-
-    # escape regex chars in right hand side
-    gsub(/[\(\)\[\]\|]/, "\\\\&", short)
-
-    # shortest match must be common to each match
-    for( i in matches ) if( matches[i] && i !~ short ) return
+    # shortest match must be common to each match. escape special characters in
+    # a copy when testing, so we can return the original.
+    clean_short = short
+    gsub(/[\(\)\[\]\|]/, "\\\\&", clean_short)
+    for( i in matches ) if( matches[i] && i !~ clean_short ) return
     return short
    }
    BEGIN { split(q, a, " ") }
@@ -198,5 +200,5 @@ elif compctl &> /dev/null; then
   read -l compl
   reply=(${(f)"$(_z --complete "$compl")"})
  }
- compctl -U -K _z_zsh_tab_completion _z
+ compctl -Q -U -K _z_zsh_tab_completion _z
 fi
