@@ -37,7 +37,22 @@ EXAMPLES
 
 
 NOTES
-       Installation:
+       = Installation (Mac OS X) - In the below, update instances of yourusername with your own username:
+
+       Save z.sh to:
+       /Users/yourusername/z.sh
+
+       Open or create a new file:
+       /Users/yourusername/.bash_profile
+
+       Add the following code:
+       . /Users/yourusername/z.sh
+
+       Save
+
+       Open Terminal (or close and reopen if already open) cd around for a while to build up the db.
+
+       = Installation (Linux):
 
        Put something like this in your $HOME/.bashrc:
 
