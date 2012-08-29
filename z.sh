@@ -3,13 +3,8 @@
 # maintains a jump-list of the directories you actually use
 #
 # INSTALL:
-#   * put something like this in your .bashrc:
+#   * put something like this in your .bashrc/.zshrc:
 #     . /path/to/z.sh
-#   * put something like this in your .zshrc:
-#     . /path/to/z.sh
-#     function precmd () {
-#       _z --add "$(pwd -P)"
-#     }
 #   * cd around for a while to build up the db
 #   * PROFIT!!
 #   * optionally:
@@ -191,6 +186,13 @@ if complete &> /dev/null; then
   [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
  }
 elif compctl &> /dev/null; then
+ [ "$_Z_NO_PROMPT_COMMAND" ] || {
+  # populate directory list, avoid clobbering any other precmds
+  _z_precmd() {
+    _z --add "$(pwd $_Z_RESOLVE_SYMLINKS)"
+  }
+  precmd_functions+=(_z_precmd)
+ }
  # zsh tab completion
  _z_zsh_tab_completion() {
   local compl

@@ -39,31 +39,24 @@ directory that matches ALL of the regexes given on the command line.
 
 \fBInstallation:\fR
 .P
-Put something like this in your \fB$HOME/.bashrc\fR:
+Put something like this in your \fB$HOME/.bashrc\fR or \fB$HOME/.zshrc\fR:
 .P
  \fB. /path/to/z.sh\fR
-.P
-Put something like this in your \fB$HOME/.zshrc\fR:
-.P
- \fB. /path/to/z.sh
- function precmd () {
-   _z --add "$(pwd -P)"
- }\fR
 .P
 \fBcd\fR around for a while to build up the db.
 .P
 PROFIT!!
 .P
 Optionally:
- Set \fB$_Z_CMD\fR in .bashrc/.zshrc to change the command (default \fBz\fR).
+ Set \fB$_Z_CMD\fR to change the command name (default \fBz\fR).
 .br
  Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
 .br
  Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
 .br
- Set \fB$_Z_NO_PROMPT_COMMAND\fR if you're handling \fBPROMPT_COMMAND\fR yourself.
+ Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
 .br
- (These settings should go before the lines added above.)
+ (These settings should go in .bashrc/.zshrc before the lines added above.)
 .br
  Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fB.
 .P
@@ -111,26 +104,22 @@ behavior if the last argument to \fBz\fR begins with \fB/\fR.
 .SH ENVIRONMENT
 A function \fB_z()\fR is defined.
 .P
-An alias \fB$_Z_CMD\fR='_z 2>&1' is defined. If not set, \fB$_Z_CMD\fR defaults
-to \fBz\fR.
+The contents of the variable \fB$_Z_CMD\fR is aliased to \fB_z 2>&1\fR. If not
+set, \fB$_Z_CMD\fR defaults to \fBz\fR.
 .P
 The environment variable \fB$_Z_DATA\fR can be used to control the datafile
 location. If it is not defined, the location defaults to \fB$HOME/.z\fR.
 .P
 The environment variable \fB$_Z_NO_RESOLVE_SYMLINKS\fR can be set to prevent
 resolving of symlinks. If it is not set, symbolic links will be resolved when
-added to the datafile.
+added to the datafile..
 .P
-In bash, \fBz\fR uses the \fBPROMPT_COMMAND\fR environment variable to maintain
-its database. Specifically it prepends:
-.P
- \fB_z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;\fR
-.P
-to any existing \fBPROMPT_COMMAND\fR. zsh users need to manually set
-\fBprecmd()\fR as described in the installation instructions.
+In bash, \fBz\fR prepends a command to the \fBPROMPT_COMMAND\fR environment
+variable to maintain its database. In zsh, \fBz\fR appends a function
+\fB_z_precmd\fR to the \fBprecmd_functions\fR array.
 .P
 The environment variable \fB$_Z_NO_PROMPT_COMMAND\fR can be set if you want to
-handle \fRPROMPT_COMMAND\fR yourself.
+handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
 
 .SH FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the

@@ -1,13 +1,24 @@
-Z(1)                             User Commands                            Z(1)
+*******************************************************************************
+*                                                                             *
+*                  ZSH USERS BACKWARD COMPATIBILITY WARNING                   *
+*                                                                             *
+*   z now handles 'precmd' set up for zsh. Current users using zsh should     *
+*   remove the precmd function described in the Installation instructions.    *
+*                                                                             *
+*                  ZSH USERS BACKWARD COMPATIBILITY WARNING                   *
+*                                                                             *
+*******************************************************************************
+
+Z(1)				 User Commands				  Z(1)
 
 
 
 NAME
-       z - jump around
+       z − jump around
 
 
 SYNOPSIS
-       z [-h] [-l] [-r] [-t] [regex1 regex2 ... regexn]
+       z [−h] [−l] [−r] [−t] [regex1 regex2 ... regexn]
 
 
 AVAILABILITY
@@ -15,63 +26,57 @@ AVAILABILITY
 
 
 DESCRIPTION
-       Tracks your most used directories, based on 'frecency'.
+       Tracks your most used directories, based on ’frecency’.
 
-       After  a  short  learning  phase, z will take you to the most 'frecent'
+       After  a  short	learning  phase, z will take you to the most ’frecent’
        directory that matches ALL of the regexes given on the command line.
 
 
 OPTIONS
-       -h show a brief help message
-       -l list only
-       -r match by rank only
-       -t match by recent access only
+       −h show a brief help message
+       −l list only
+       −r match by rank only
+       −t match by recent access only
 
 
 EXAMPLES
-       z foo     cd to most frecent dir matching foo
+       z foo	 cd to most frecent dir matching foo
        z foo bar cd to most frecent dir matching foo and bar
-       z -r foo  cd to highest ranked dir matching foo
-       z -t foo  cd to most recently accessed dir matching foo
-       z -l foo  list all dirs matching foo (by frecency)
+       z ‐r foo  cd to highest ranked dir matching foo
+       z ‐t foo  cd to most recently accessed dir matching foo
+       z ‐l foo  list all dirs matching foo (by frecency)
 
 
 NOTES
        Installation:
 
-       Put something like this in your $HOME/.bashrc:
+       Put something like this in your $HOME/.bashrc or $HOME/.zshrc:
 
-        . /path/to/z.sh
-
-       Put something like this in your $HOME/.zshrc:
-
-        . /path/to/z.sh
-        function precmd () {
-          _z --add "$(pwd -P)"
-        }
+	. /path/to/z.sh
 
        cd around for a while to build up the db.
 
        PROFIT!!
 
        Optionally:
-        Set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
-        Set $_Z_DATA to change the datafile (default $HOME/.z).
-        Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
-        Set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
-        (These settings should go before the lines added above.)
-        Install the provided man page z.1 somewhere like /usr/local/man/man1.
+	Set $_Z_CMD to change the command name (default z).
+	Set $_Z_DATA to change the datafile (default $HOME/.z).
+	Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
+	Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd yourself.
+	(These settings should go in .bashrc/.zshrc  before  the  lines  added
+       above.)
+	Install  the provided man page z.1 somewhere like /usr/local/man/man1.
 
        Aging:
 
        The rank of directories maintained by z undergoes aging based on a sim‐
        ple  formula.  The  rank  of each entry is incremented every time it is
-       accessed. When the sum of ranks is greater than  1000,  all  ranks  are
+       accessed. When the sum of ranks is greater than	1000,  all  ranks  are
        multiplied by 0.9. Entries with a rank lower than 1 are forgotten.
 
        Frecency:
 
-       Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted
+       Frecency is a portmantaeu of ’recent’ and ’frequency’. It is a weighted
        rank that depends on how often and how recently something  occured.  As
        far as I know, Mozilla came up with the term.
 
@@ -92,10 +97,10 @@ NOTES
 
        z supports tab completion. After any number of arguments, press TAB  to
        complete on directories that match each argument. Due to limitations of
-       the completion implementations, only the last  argument  will  be  com‐
+       the completion implementations, only the last  argument	will  be  com‐
        pleted in the shell.
 
-       Internally,  z  decides you've requested a completion if the last argu‐
+       Internally,  z  decides you’ve requested a completion if the last argu‐
        ment passed is an absolute path to  an  existing  directory.  This  may
        cause unexpected behavior if the last argument to z begins with /.
 
@@ -103,26 +108,22 @@ NOTES
 ENVIRONMENT
        A function _z() is defined.
 
-       An  alias $_Z_CMD='_z 2>&1' is defined. If not set, $_Z_CMD defaults to
-       z.
+       The contents of the variable $_Z_CMD is aliased to _z 2>&1. If not set,
+       $_Z_CMD defaults to z.
 
        The environment variable $_Z_DATA can be used to control  the  datafile
        location. If it is not defined, the location defaults to $HOME/.z.
 
        The  environment variable $_Z_NO_RESOLVE_SYMLINKS can be set to prevent
        resolving of symlinks. If  it  is  not  set,  symbolic  links  will  be
-       resolved when added to the datafile.
+       resolved when added to the datafile..
 
-       In bash, z uses the PROMPT_COMMAND environment variable to maintain its
-       database. Specifically it prepends:
-
-        _z --add "$(pwd -P 2>/dev/null)" 2>/dev/null;
-
-       to any existing PROMPT_COMMAND. zsh users need to manually set precmd()
-       as described in the installation instructions.
+       In  bash,  z prepends a command to the PROMPT_COMMAND environment vari‐
+       able to maintain its database. In zsh, z appends a  function  _z_precmd
+       to the precmd_functions array.
 
        The  environment  variable $_Z_NO_PROMPT_COMMAND can be set if you want
-       to handle PROMPT_COMMAND yourself.
+       to handle PROMPT_COMMAND or precmd yourself.
 
 
 FILES
@@ -139,4 +140,4 @@ SEE ALSO
 
 
 
-z                                February 2011                            Z(1)
+z				 February 2011				  Z(1)
