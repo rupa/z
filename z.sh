@@ -188,9 +188,15 @@ if complete &> /dev/null; then
 elif compctl &> /dev/null; then
  [ "$_Z_NO_PROMPT_COMMAND" ] || {
   # populate directory list, avoid clobbering any other precmds
-  _z_precmd() {
-    _z --add "$(pwd $_Z_RESOLVE_SYMLINKS)"
-  }
+  if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
+    _z_precmd() {
+      _z --add "${PWD:a}"
+    }
+  else
+    _z_precmd() {
+      _z --add "${PWD:A}"
+    }
+  fi
   precmd_functions+=(_z_precmd)
  }
  # zsh tab completion
