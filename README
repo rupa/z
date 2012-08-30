@@ -3,7 +3,16 @@
 *                  ZSH USERS BACKWARD COMPATIBILITY WARNING                   *
 *                                                                             *
 *   z now handles 'precmd' set up for zsh. Current users using zsh should     *
-*   remove the precmd function described in the Installation instructions.    *
+*   remove the precmd function that was described in the installation         *
+*   instructions for previous versions.                                       *
+*                                                                             *
+*   In short, this:                                                           *
+*       . /path/to/z.sh                                                       *
+*       function precmd () {                                                  *
+*        _z --add "$(pwd -P)"                                                 *
+*       }                                                                     *
+*   should now just be:                                                       *
+*       . /path/to/z.sh                                                       *
 *                                                                             *
 *                  ZSH USERS BACKWARD COMPATIBILITY WARNING                   *
 *                                                                             *
