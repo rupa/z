@@ -143,7 +143,7 @@ FILES
 
 
 SEE ALSO
-       regex(7), cdargs, pushd, popd, autojump, cdargs
+       regex(7), pushd, popd, autojump, cdargs
 
        Please file bugs at https://github.com/rupa/z/
 
