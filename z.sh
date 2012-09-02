@@ -177,15 +177,7 @@ alias ${_Z_CMD:-z}='_z 2>&1'
 
 [ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
 
-if complete &> /dev/null; then
- # bash tab completion
- complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
- [ "$_Z_NO_PROMPT_COMMAND" ] || {
-  # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-  echo $PROMPT_COMMAND | grep -q "_z --add"
-  [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
- }
-elif compctl &> /dev/null; then
+if compctl &> /dev/null; then
  [ "$_Z_NO_PROMPT_COMMAND" ] || {
   # populate directory list, avoid clobbering any other precmds
   if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
@@ -206,4 +198,12 @@ elif compctl &> /dev/null; then
   reply=(${(f)"$(_z --complete "$compl")"})
  }
  compctl -U -K _z_zsh_tab_completion _z
+elif complete &> /dev/null; then
+ # bash tab completion
+ complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
+ [ "$_Z_NO_PROMPT_COMMAND" ] || {
+  # populate directory list. avoid clobbering other PROMPT_COMMANDs.
+  echo $PROMPT_COMMAND | grep -q "_z --add"
+  [ $? -gt 0 ] && PROMPT_COMMAND='_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'"$PROMPT_COMMAND"
+ }
 fi
