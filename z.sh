@@ -119,9 +119,7 @@ _z() {
    }
    function output(files, toopen, override) {
     if( list ) {
-     if( typ == "recent" ) {
-      cmd = "sort -nr >&2"
-     } else cmd = "sort -n >&2"
+     cmd = "sort -n >&2"
      for( i in files ) if( files[i] ) printf "%-10s %s\n", files[i], i | cmd
      if( override ) printf "%-10s %s\n", "common:", override > "/dev/stderr"
     } else {
@@ -142,22 +140,22 @@ _z() {
     for( i in matches ) if( matches[i] && i !~ clean_short ) return
     return short
    }
-   BEGIN { split(q, a, " ") }
+   BEGIN { split(q, a, " "); oldf = noldf = -9999999999 }
    {
     if( typ == "rank" ) {
      f = $2
     } else if( typ == "recent" ) {
-     f = t-$3
+     f = $3-t
     } else f = frecent($2, $3)
     wcase[$1] = nocase[$1] = f
     for( i in a ) {
      if( $1 !~ a[i] ) delete wcase[$1]
      if( tolower($1) !~ tolower(a[i]) ) delete nocase[$1]
     }
-    if( wcase[$1] > oldf ) {
+    if( wcase[$1] && wcase[$1] > oldf ) {
      cx = $1
      oldf = wcase[$1]
-    } else if( nocase[$1] > noldf ) {
+    } else if( nocase[$1] && nocase[$1] > noldf ) {
      ncx = $1
      noldf = nocase[$1]
     }
