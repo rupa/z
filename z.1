@@ -56,6 +56,8 @@ Optionally:
 .br
  Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
 .br
+ Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
+.br
  (These settings should go in .bashrc/.zshrc before the lines added above.)
 .br
  Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fB.
@@ -120,6 +122,10 @@ variable to maintain its database. In zsh, \fBz\fR appends a function
 .P
 The environment variable \fB$_Z_NO_PROMPT_COMMAND\fR can be set if you want to
 handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
+.P
+The environment variable \fB$_Z_EXCLUDE_DIRS\fR can be set to an array of
+directories to exclude from tracking. \fB$HOME\fR is always excluded.
+Directories must be full paths without trailing slashes.
 
 .SH FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the
