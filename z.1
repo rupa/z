@@ -1,77 +1,94 @@
-.TH Z "1" "January 2013" "z" "User Commands"
-
-.SH NAME
+.TH "Z" "1" "January 2013" "z" "User Commands"
+.SH
+NAME
 z \- jump around
-
-.SH SYNOPSIS
+.SH
+SYNOPSIS
 z [\-h] [\-l] [\-r] [\-t] [regex1 regex2 ... regexn]
-
-.SH AVAILABILITY
+.SH
+AVAILABILITY
 bash, zsh
-
-.SH DESCRIPTION
+.SH
+DESCRIPTION
 Tracks your most used directories, based on 'frecency'.
 .P
 After a short learning phase, \fBz\fR will take you to the most 'frecent'
 directory that matches ALL of the regexes given on the command line.
-
-.SH OPTIONS
-\fB\-h\fR show a brief help message
-.br
-\fB\-l\fR list only
-.br
-\fB\-r\fR match by rank only
-.br
-\fB\-t\fR match by recent access only
-
+.SH
+OPTIONS
+.TP
+\fB\-h\fR
+show a brief help message
+.TP
+\fB\-l\fR
+list only
+.TP
+\fB\-r\fR
+match by rank only
+.TP
+\fB\-t\fR
+match by recent access only
 .SH EXAMPLES
-\fBz foo\fR     cd to most frecent dir matching foo
-.br
-\fBz foo bar\fR cd to most frecent dir matching foo and bar
-.br
-\fBz -r foo\fR  cd to highest ranked dir matching foo
-.br
-\fBz -t foo\fR  cd to most recently accessed dir matching foo
-.br
-\fBz -l foo\fR  list all dirs matching foo (by frecency)
-
-.SH NOTES
-
-\fBInstallation:\fR
+.TP 14
+\fBz foo\fR
+cd to most frecent dir matching foo
+.TP 14
+\fBz foo bar\fR
+cd to most frecent dir matching foo and bar
+.TP 14
+\fBz -r foo\fR
+cd to highest ranked dir matching foo
+.TP 14
+\fBz -t foo\fR
+cd to most recently accessed dir matching foo
+.TP 14
+\fBz -l foo\fR
+list all dirs matching foo (by frecency)
+.SH
+NOTES
+.SS
+Installation:
 .P
 Put something like this in your \fB$HOME/.bashrc\fR or \fB$HOME/.zshrc\fR:
+.RS
 .P
- \fB. /path/to/z.sh\fR
+\fB. /path/to/z.sh\fR
+.RE
 .P
 \fBcd\fR around for a while to build up the db.
 .P
 PROFIT!!
 .P
 Optionally:
- Set \fB$_Z_CMD\fR to change the command name (default \fBz\fR).
-.br
- Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
-.br
- Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
-.br
- Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
-.br
- Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
-.br
- (These settings should go in .bashrc/.zshrc before the lines added above.)
-.br
- Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fB.
-.P
-\fBAging:\fR
-.P
+.RS
+Set \fB$_Z_CMD\fR to change the command name (default \fBz\fR).
+.RE
+.RS
+Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
+.RE
+.RS
+Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
+.RE
+.RS
+Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
+.RE
+.RS
+Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
+.RE
+.RS
+(These settings should go in .bashrc/.zshrc before the lines added above.)
+.RE
+.RS
+Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fR.
+.RE
+.SS
+Aging:
 The rank of directories maintained by \fBz\fR undergoes aging based on a simple
 formula. The rank of each entry is incremented every time it is accessed. When
 the sum of ranks is greater than 6000, all ranks are multiplied by 0.99. Entries
 with a rank lower than 1 are forgotten.
-.br
-
-\fBFrecency:\fR
-.P
+.SS
+Frecency:
 Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted rank
 that depends on how often and how recently something occured. As far as I
 know, Mozilla came up with the term.
@@ -79,20 +96,16 @@ know, Mozilla came up with the term.
 To \fBz\fR, a directory that has low ranking but has been accessed recently
 will quickly have higher rank than a directory accessed frequently a long time
 ago.
-
-Frecency is determined at runtime.
-.br
-
-\fBCommon:\fR
 .P
+Frecency is determined at runtime.
+.SS
+Common:
 When multiple directories match all queries, and they all have a common prefix,
 \fBz\fR will cd to the shortest matching directory, without regard to priority.
 This has been in effect, if undocumented, for quite some time, but should
 probably be configurable or reconsidered.
-.br
-
-\fBTab Completion\fR
-.P
+.SS
+Tab Completion:
 \fBz\fR supports tab completion. After any number of arguments, press TAB to
 complete on directories that match each argument. Due to limitations of the
 completion implementations, only the last argument will be completed in the
@@ -101,9 +114,8 @@ shell.
 Internally, \fBz\fR decides you've requested a completion if the last argument
 passed is an absolute path to an existing directory. This may cause unexpected
 behavior if the last argument to \fBz\fR begins with \fB/\fR.
-.br
-
-.SH ENVIRONMENT
+.SH
+ENVIRONMENT
 A function \fB_z()\fR is defined.
 .P
 The contents of the variable \fB$_Z_CMD\fR is aliased to \fB_z 2>&1\fR. If not
@@ -126,14 +138,14 @@ handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
 The environment variable \fB$_Z_EXCLUDE_DIRS\fR can be set to an array of
 directories to exclude from tracking. \fB$HOME\fR is always excluded.
 Directories must be full paths without trailing slashes.
-
-.SH FILES
+.SH
+FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the
 \fB$_Z_DATA\fR environment variable.
 .P
 A man page (\fBz.1\fR) is provided.
-
-.SH SEE ALSO
+.SH
+SEE ALSO
 regex(7), pushd, popd, autojump, cdargs
 .P
 Please file bugs at https://github.com/rupa/z/
