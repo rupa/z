@@ -21,6 +21,11 @@
 #   * z -t foo  # cd to most recently accessed dir matching foo
 #   * z -l foo  # list all dirs matching foo (by frecency)
 
+case $- in
+ *i*) ;;
+   *) echo 'ERROR: z.sh is meant to be sourced, not directly executed.'
+esac
+
 _z() {
 
  local datafile="${_Z_DATA:-$HOME/.z}"
