@@ -218,3 +218,6 @@ elif complete &> /dev/null; then
   }
  }
 fi
+
+# we can unset these as they are only used during setup
+unset -v _Z_NO_PROMPT_COMMAND _Z_NO_RESOLVE_SYMLINKS _Z_RESOLVE_SYMLINKS
