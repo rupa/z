@@ -19,7 +19,8 @@
 #   * z foo bar # cd to most frecent dir matching foo and bar
 #   * z -r foo  # cd to highest ranked dir matching foo
 #   * z -t foo  # cd to most recently accessed dir matching foo
-#   * z -l foo  # list all dirs matching foo (by frecency)
+#   * z -l foo  # list matches instead of cd
+#   * z -c foo  # restrict matches to subdirs of $PWD
 
 case $- in
  *i*) ;;
@@ -100,14 +101,15 @@ _z() {
  else
   # list/go
   while [ "$1" ]; do case "$1" in
-   -h) echo "z [-h][-l][-r][-t] args" >&2; return;;
+   -c) local fnd="$PWD $fnd";;
+   -h) echo "${_Z_CMD:-z} [-c][-h][-l][-r][-t] args" >&2; return;;
    -l) local list=1;;
    -r) local typ="rank";;
    -t) local typ="recent";;
    --) while [ "$1" ]; do shift; local fnd="$fnd $1";done;;
     *) local fnd="$fnd $1";;
   esac; local last=$1; shift; done
-  [ "$fnd" ] || local list=1
+  [ "$fnd" -a "$fnd" != "$PWD " ] || local list=1
 
   # if we hit enter on a completion just go there
   case "$last" in

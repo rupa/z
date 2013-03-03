@@ -4,7 +4,7 @@ NAME
 z \- jump around
 .SH
 SYNOPSIS
-z [\-h] [\-l] [\-r] [\-t] [regex1 regex2 ... regexn]
+z [\-c] [\-h] [\-l] [\-r] [\-t] [regex1 regex2 ... regexn]
 .SH
 AVAILABILITY
 bash, zsh
@@ -16,6 +16,9 @@ After a short learning phase, \fBz\fR will take you to the most 'frecent'
 directory that matches ALL of the regexes given on the command line.
 .SH
 OPTIONS
+.TP
+\fB\-c\fR
+restrict matches to subdirectories of the current directory.
 .TP
 \fB\-h\fR
 show a brief help message

@@ -6,7 +6,7 @@ NAME
        z - jump around
 
 SYNOPSIS
-       z [-h] [-l] [-r] [-t] [regex1 regex2 ... regexn]
+       z [-c] [-h] [-l] [-r] [-t] [regex1 regex2 ... regexn]
 
 AVAILABILITY
        bash, zsh
@@ -18,6 +18,8 @@ DESCRIPTION
        directory that matches ALL of the regexes given on the command line.
 
 OPTIONS
+       -c     restrict matches to subdirectories of the current directory.
+
        -h     show a brief help message
 
        -l     list only
