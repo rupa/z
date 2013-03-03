@@ -103,7 +103,7 @@ _z() {
   while [ "$1" ]; do case "$1" in
    --) while [ "$1" ]; do shift; local fnd="$fnd $1";done;;
    -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
-        c) local fnd="$PWD $fnd";;
+        c) local fnd="^$PWD $fnd";;
         h) echo "${_Z_CMD:-z} [-chlrt] args" >&2; return;;
         l) local list=1;;
         r) local typ="rank";;
@@ -111,7 +111,7 @@ _z() {
        esac; opt=${opt:1}; done;;
     *) local fnd="$fnd $1";;
   esac; local last=$1; shift; done
-  [ "$fnd" -a "$fnd" != "$PWD " ] || local list=1
+  [ "$fnd" -a "$fnd" != "^$PWD " ] || local list=1
 
   # if we hit enter on a completion just go there
   case "$last" in
