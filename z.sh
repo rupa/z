@@ -100,7 +100,7 @@ _z() {
  else
   # list/go
   while [ "$1" ]; do case "$1" in
-   -h) echo "z [-h][-l][-r][-t] args" >&2; return;;
+   -h) echo "${_Z_CMD:-z} [-h][-l][-r][-t] args" >&2; return;;
    -l) local list=1;;
    -r) local typ="rank";;
    -t) local typ="recent";;
