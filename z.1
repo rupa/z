@@ -4,7 +4,7 @@ NAME
 z \- jump around
 .SH
 SYNOPSIS
-z [\-c] [\-h] [\-l] [\-r] [\-t] [regex1 regex2 ... regexn]
+z [\-chlrt] [regex1 regex2 ... regexn]
 .SH
 AVAILABILITY
 bash, zsh
@@ -129,7 +129,7 @@ location. If it is not defined, the location defaults to \fB$HOME/.z\fR.
 .P
 The environment variable \fB$_Z_NO_RESOLVE_SYMLINKS\fR can be set to prevent
 resolving of symlinks. If it is not set, symbolic links will be resolved when
-added to the datafile..
+added to the datafile.
 .P
 In bash, \fBz\fR prepends a command to the \fBPROMPT_COMMAND\fR environment
 variable to maintain its database. In zsh, \fBz\fR appends a function
