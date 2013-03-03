@@ -109,7 +109,7 @@ _z() {
    --) while [ "$1" ]; do shift; local fnd="$fnd $1";done;;
     *) local fnd="$fnd $1";;
   esac; local last=$1; shift; done
-  [ "$fnd" ] || local list=1
+  [ "$fnd" -a "$fnd" != "$PWD " ] || local list=1
 
   # if we hit enter on a completion just go there
   case "$last" in
