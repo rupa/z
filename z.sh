@@ -27,6 +27,10 @@ case $- in
    *) echo 'ERROR: z.sh is meant to be sourced, not directly executed.'
 esac
 
+[ -d "${_Z_DATA:-$HOME/.z}" ] && {
+    echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
+}
+
 _z() {
 
  local datafile="${_Z_DATA:-$HOME/.z}"
