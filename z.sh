@@ -108,7 +108,8 @@ _z() {
    --) while [ "$1" ]; do shift; local fnd="$fnd $1";done;;
    -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
         c) local fnd="^$PWD $fnd";;
-        h) echo "${_Z_CMD:-z} [-chlrt] args" >&2; return;;
+        h) echo "${_Z_CMD:-z} [-chlrtx] args" >&2; return;;
+        x) sed -i "\:^${PWD}|.*:d" "$datafile";;
         l) local list=1;;
         r) local typ="rank";;
         t) local typ="recent";;
