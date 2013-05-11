@@ -4,7 +4,7 @@ NAME
 z \- jump around
 .SH
 SYNOPSIS
-z [\-chlrt] [regex1 regex2 ... regexn]
+z [\-chlrtx] [regex1 regex2 ... regexn]
 .SH
 AVAILABILITY
 bash, zsh
@@ -31,6 +31,9 @@ match by rank only
 .TP
 \fB\-t\fR
 match by recent access only
+.TP
+\fB\-x\fR
+remove the current directory from the datafile
 .SH EXAMPLES
 .TP 14
 \fBz foo\fR
