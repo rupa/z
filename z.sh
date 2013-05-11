@@ -222,8 +222,8 @@ elif complete &> /dev/null; then
  [ "$_Z_NO_PROMPT_COMMAND" ] || {
   # bash populate directory list. avoid clobbering other PROMPT_COMMANDs.
   echo $PROMPT_COMMAND | grep -q "_z --add" || {
-   [[ "$PROMPT_COMMAND" =~ [[:space:]]*(.*[^;[:space:]]) ]]
-   PROMPT_COMMAND="${BASH_REMATCH[1]:-:}"';_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null'
+   [[ "$PROMPT_COMMAND" =~ .*[^\;[:space:]] ]]
+   PROMPT_COMMAND="${BASH_REMATCH[0]:-:}"';_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null'
   }
  }
 fi
