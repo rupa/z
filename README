@@ -6,7 +6,7 @@ NAME
        z - jump around
 
 SYNOPSIS
-       z [-chlrt] [regex1 regex2 ... regexn]
+       z [-chlrtx] [regex1 regex2 ... regexn]
 
 AVAILABILITY
        bash, zsh
@@ -27,6 +27,8 @@ OPTIONS
        -r     match by rank only
 
        -t     match by recent access only
+
+       -x     remove the current directory from the datafile
 
 EXAMPLES
        z foo         cd to most frecent dir matching foo
