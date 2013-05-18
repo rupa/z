@@ -28,6 +28,8 @@ OPTIONS
 
        -t     match by recent access only
 
+       -x     remove the current directory from the datafile
+
 EXAMPLES
        z foo         cd to most frecent dir matching foo
 
