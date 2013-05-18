@@ -18,7 +18,7 @@ DESCRIPTION
        directory that matches ALL of the regexes given on the command line.
 
 OPTIONS
-       -c     restrict matches to subdirectories of the current directory.
+       -c     restrict matches to subdirectories of the current directory
 
        -h     show a brief help message
 
@@ -68,8 +68,8 @@ NOTES
        multiplied by 0.99. Entries with a rank lower than 1 are forgotten.
 
    Frecency:
-       Frecency is a portmantaeu of 'recent' and 'frequency'. It is a weighted
-       rank  that  depends on how often and how recently something occured. As
+       Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted
+       rank  that  depends on how often and how recently something occurred. As
        far as I know, Mozilla came up with the term.
 
        To z, a directory that has low ranking but has been  accessed  recently
