@@ -80,7 +80,7 @@ _z() {
   if [ $? -ne 0 -a -f "$datafile" ]; then
    env rm -f "$tempfile"
   else
-   env mv -f "$tempfile" "$datafile"
+   env mv -f "$tempfile" "$datafile" || env rm -f "$tmpfile"
   fi
 
  # tab completion
