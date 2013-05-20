@@ -120,7 +120,8 @@ ENVIRONMENT
 
 FILES
        Data  is  stored  in  $HOME/.z.  This  can be overridden by setting the
-       $_Z_DATA environment variable.
+       $_Z_DATA environment variable. When initialized, z will raise an  error
+       if this path is a directory, and not function correctly.
 
        A man page (z.1) is provided.
 

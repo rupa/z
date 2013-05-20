@@ -4,7 +4,7 @@ NAME
 z \- jump around
 .SH
 SYNOPSIS
-z [\-chlrt] [regex1 regex2 ... regexn]
+z [\-chlrtx] [regex1 regex2 ... regexn]
 .SH
 AVAILABILITY
 bash, zsh
@@ -31,6 +31,9 @@ match by rank only
 .TP
 \fB\-t\fR
 match by recent access only
+.TP
+\fB\-x\fR
+remove the current directory from the datafile
 .SH EXAMPLES
 .TP 14
 \fBz foo\fR
@@ -144,7 +147,8 @@ Directories must be full paths without trailing slashes.
 .SH
 FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the
-\fB$_Z_DATA\fR environment variable.
+\fB$_Z_DATA\fR environment variable. When initialized, \fBz\fR will raise an
+error if this path is a directory, and not function correctly.
 .P
 A man page (\fBz.1\fR) is provided.
 .SH
