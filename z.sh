@@ -48,7 +48,7 @@ _z() {
 
   # maintain the file
   local tempfile
-  tempfile="$(mktemp "$datafile.XXXXXX")" || return
+  tempfile="$datafile.$RANDOM"
   while read line; do
    [ -d "${line%%\|*}" ] && echo $line
   done < "$datafile" | awk -v path="$*" -v now="$(date +%s)" -F"|" '
