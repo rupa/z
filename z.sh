@@ -208,7 +208,7 @@ alias ${_Z_CMD:-z}='_z 2>&1'
 if compctl &> /dev/null; then
     # zsh
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
-        # populate directory list, avoid clobbering any other precmds
+        # populate directory list, avoid clobbering any other precmds.
         if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
             _z_precmd() {
                 _z --add "${PWD:a}"
@@ -232,7 +232,7 @@ elif complete &> /dev/null; then
     # tab completion
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
-        # bash populate directory list. avoid clobbering other PROMPT_COMMANDs.
+        # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep -q "_z --add" <<< "$PROMPT_COMMAND" || {
             PROMPT_COMMAND="${PROMPT_COMMAND%;}${PROMPT_COMMAND:+;}"'_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'
         }
