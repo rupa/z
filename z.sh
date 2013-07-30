@@ -218,7 +218,9 @@ if compctl >/dev/null 2>&1; then
                 _z --add "${PWD:A}"
             }
         fi
-        precmd_functions+=(_z_precmd)
+        grep _z_precmd <<< "$precmd_functions" >/dev/null || {
+            precmd_functions+=(_z_precmd)
+        }
     }
     _z_zsh_tab_completion() {
         # tab completion
