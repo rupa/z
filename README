@@ -15,7 +15,10 @@ DESCRIPTION
        Tracks your most used directories, based on 'frecency'.
 
        After  a  short  learning  phase, z will take you to the most 'frecent'
-       directory that matches ALL of the regexes given on the command line.
+       directory that matches ALL of the regexes given on the command line, in
+       order.
+
+       For example, z foo bar would match /foo/bar but not /bar/foo.
 
 OPTIONS
        -c     restrict matches to subdirectories of the current directory
@@ -33,7 +36,7 @@ OPTIONS
 EXAMPLES
        z foo         cd to most frecent dir matching foo
 
-       z foo bar     cd to most frecent dir matching foo and bar
+       z foo bar     cd to most frecent dir matching foo, then bar
 
        z -r foo      cd to highest ranked dir matching foo
 

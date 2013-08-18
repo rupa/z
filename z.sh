@@ -88,15 +88,13 @@ _z() {
         done < "$datafile" | awk -v q="$2" -F"|" '
             BEGIN {
                 if( q == tolower(q) ) imatch = 1
-                split(substr(q, 3), fnd, " ")
+                q = substr(q, 3)
+                gsub(" ", ".*", q)
             }
             {
                 if( imatch ) {
-                    for( x in fnd ) tolower($1) !~ tolower(fnd[x]) && $1 = ""
-                } else {
-                    for( x in fnd ) $1 !~ fnd[x] && $1 = ""
-                }
-                if( $1 ) print $1
+                    if( tolower($1) ~ tolower(q) ) print $1
+                } else if( $1 ~ q ) print $1
             }
         ' 2>/dev/null
 
@@ -167,18 +165,20 @@ _z() {
                 for( x in matches ) if( matches[x] && x !~ clean_short ) return
                 return short
             }
-            BEGIN { split(q, words, " "); hi_rank = ihi_rank = -9999999999 }
+            BEGIN {
+                q = substr(q, 2)
+                gsub(" ", ".*", q)
+                hi_rank = ihi_rank = -9999999999
+            }
             {
                 if( typ == "rank" ) {
                     rank = $2
                 } else if( typ == "recent" ) {
                     rank = $3 - t
                 } else rank = frecent($2, $3)
-                matches[$1] = imatches[$1] = rank
-                for( x in words ) {
-                    if( $1 !~ words[x] ) delete matches[$1]
-                    if( tolower($1) !~ tolower(words[x]) ) delete imatches[$1]
-                }
+                if( $1 ~ q ) {
+                    matches[$1] = rank
+                } else if( tolower($1) ~ tolower(q) ) imatches[$1] = rank
                 if( matches[$1] && matches[$1] > hi_rank ) {
                     best_match = $1
                     hi_rank = matches[$1]

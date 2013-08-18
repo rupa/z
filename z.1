@@ -13,7 +13,9 @@ DESCRIPTION
 Tracks your most used directories, based on 'frecency'.
 .P
 After a short learning phase, \fBz\fR will take you to the most 'frecent'
-directory that matches ALL of the regexes given on the command line.
+directory that matches ALL of the regexes given on the command line, in order.
+
+For example, \fBz foo bar\fR would match \fB/foo/bar\fR but not \fB/bar/foo\fR.
 .SH
 OPTIONS
 .TP
@@ -40,7 +42,7 @@ remove the current directory from the datafile
 cd to most frecent dir matching foo
 .TP 14
 \fBz foo bar\fR
-cd to most frecent dir matching foo and bar
+cd to most frecent dir matching foo, then bar
 .TP 14
 \fBz -r foo\fR
 cd to highest ranked dir matching foo
