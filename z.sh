@@ -166,7 +166,6 @@ _z() {
                 return short
             }
             BEGIN {
-                q = substr(q, 2)
                 gsub(" ", ".*", q)
                 hi_rank = ihi_rank = -9999999999
             }
