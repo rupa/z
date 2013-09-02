@@ -101,6 +101,7 @@ _z() {
         ' 2>/dev/null
 
     else
+        target=$1
         # list/go
         while [ "$1" ]; do case "$1" in
             --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
@@ -197,7 +198,11 @@ _z() {
             }
         ')"
         [ $? -gt 0 ] && return
-        [ "$cd" ] && cd "$cd"
+        if [ "$cd" ]; then
+          cd "$cd";
+        else
+          cd "$target";
+        fi
     fi
 }
 
