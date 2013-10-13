@@ -13,6 +13,7 @@
 #         set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
 #         set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #         set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
+#         set $_ZI_CMD in .bashrc/.zshrc to change the index command (default zi).
 #
 # USE:
 #     * z foo     # cd to most frecent dir matching foo
@@ -21,21 +22,19 @@
 #     * z -t foo  # cd to most recently accessed dir matching foo
 #     * z -l foo  # list matches instead of cd
 #     * z -c foo  # restrict matches to subdirs of $PWD
+#     * zi [n]    # add the current directory to the datafile, optionally
+#                 # including [n] levels of subdirectories
 
 [ -d "${_Z_DATA:-$HOME/.z}" ] && {
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
 
 # indexing function:
-#   * get list of non-hidden directories from current working directory and add them to $datafile
-#   * optionally pass an integer to set number of subdirectories include (default is 1)
-#   * frecency of all locations added will start at |1|(the_current_datetime)
-#   * set $_ZI_CMD in .bashrc/.zshrc to change the command (default zi).
 _zi() {
     local datafile="${_Z_DATA:-$HOME/.z}"
     if [ "$1" ]; then
         for fn in `find $PWD -type d -not \( -name ".?*" -prune \) -maxdepth "$1"`; do
-            echo "$fn|1|$(date +%s)" >> $datafile
+            echo "$fn|1|$(date +%s)" >> $datafile # frecency starts at |1|(the_current_datetime)
         done
     else
         for fn in `find $PWD -type d -not \( -name ".?*" -prune \) -maxdepth 1`; do

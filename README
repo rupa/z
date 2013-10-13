@@ -41,6 +41,10 @@ EXAMPLES
 
        z -l foo      list all dirs matching foo (by frecency)
 
+       zi            add the current directory to the datafile
+                     
+       zi 2          add the current directory + 2 levels down
+
 NOTES
    Installation:
        Put something like this in your $HOME/.bashrc or $HOME/.zshrc:
@@ -58,6 +62,7 @@ NOTES
               Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
               self.
               Set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
+              set $_ZI_CMD in .bashrc/.zshrc to change the index command (default zi).
               (These  settings  should  go  in  .bashrc/.zshrc before the line
               added above.)
               Install   the   provided   man   page   z.1    somewhere    like
