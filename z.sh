@@ -26,6 +26,27 @@
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
 
+# indexing function:
+#   * get list of non-hidden directories from current working directory and add them to $datafile
+#   * optionally pass an integer to set number of subdirectories include (default is 1)
+#   * frecency of all locations added will start at |1|(the_current_datetime)
+#   * set $_ZI_CMD in .bashrc/.zshrc to change the command (default zi).
+_zi() {
+    local datafile="${_Z_DATA:-$HOME/.z}"
+    if [ "$1" ]; then
+        for fn in `find $PWD -type d -not \( -name ".?*" -prune \) -maxdepth "$1"`; do
+            echo "$fn|1|$(date +%s)" >> $datafile
+        done
+    else
+        for fn in `find $PWD -type d -not \( -name ".?*" -prune \) -maxdepth 1`; do
+            echo "$fn|1|$(date +%s)" >> $datafile
+        done
+    fi
+}
+
+alias ${_ZI_CMD:-zi}='_zi 2>&1'
+
+
 _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
