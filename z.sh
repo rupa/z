@@ -218,7 +218,7 @@ if compctl >/dev/null 2>&1; then
             }
         fi
         [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
-            precmd_functions+=(_z_precmd)
+            precmd_functions[$(($#precmd_functions+1))]=_z_precmd
         }
     }
     _z_zsh_tab_completion() {
