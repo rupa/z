@@ -78,7 +78,7 @@ _z() {
         if [ $? -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
-            env mv -f "$tempfile" "$datafile" || env rm -f "$tmpfile"
+            env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
         fi
 
     # tab completion
@@ -103,7 +103,7 @@ _z() {
     else
         # list/go
         while [ "$1" ]; do case "$1" in
-            --) while [ "$1" ]; do shift; local fnd="$fnd $1";done;;
+            --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
             -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
                     h) echo "${_Z_CMD:-z} [-chlrtx] args" >&2; return;;
@@ -112,7 +112,7 @@ _z() {
                     r) local typ="rank";;
                     t) local typ="recent";;
                 esac; opt=${opt:1}; done;;
-             *) local fnd="$fnd $1";;
+             *) local fnd="$fnd${fnd:+ }$1";;
         esac; local last=$1; shift; done
         [ "$fnd" -a "$fnd" != "^$PWD " ] || local list=1
 
@@ -218,7 +218,9 @@ if compctl >/dev/null 2>&1; then
                 _z --add "${PWD:A}"
             }
         fi
-        precmd_functions+=(_z_precmd)
+        [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
+            precmd_functions[$(($#precmd_functions+1))]=_z_precmd
+        }
     }
     _z_zsh_tab_completion() {
         # tab completion
@@ -233,7 +235,7 @@ elif complete >/dev/null 2>&1; then
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-        grep -q "_z --add" <<< "$PROMPT_COMMAND" || {
+        grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
             PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'
         }
     }
