@@ -29,13 +29,11 @@ int main() {
     } else {
         sprintf(datafile, "%s", _Z_DATA);
     }
-
     read = fopen(datafile, "r");
     if (read == NULL) return EXIT_FAILURE;
 
     srand(time(NULL));
     sprintf(tmpfile, "%s.%d", datafile, rand());
-
     write = fopen(tmpfile, "w");
     if (write == NULL) return EXIT_FAILURE;
 
@@ -54,5 +52,4 @@ int main() {
     if (rename(tmpfile, datafile) == 0) return EXIT_SUCCESS;
 
     return EXIT_FAILURE;
-
 }
