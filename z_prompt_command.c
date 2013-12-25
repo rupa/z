@@ -12,11 +12,16 @@ int main(int __unused argc, char **argv) {
 
     if (argv[1] == NULL) return EXIT_FAILURE;
 
+    static const float MULTIPLIER = 0.99;
+    static const int RANK_SUM_MAX = 6000;
+
     char * _Z_DATA;
     char datafile[PATH_MAX];
     char tmpfile[PATH_MAX];
+    char agedfile[PATH_MAX];
     FILE *read;
     FILE *write;
+    FILE *aged;
     char line[LINE_MAX];
     char pth[PATH_MAX];
     float rank;
@@ -24,6 +29,7 @@ int main(int __unused argc, char **argv) {
     struct stat s;
     time_t epoch = time(NULL);
     int found = 0;
+    float rank_sum = 0;
 
     // Don't track $HOME
     if (strcmp(argv[1], getenv("HOME")) == 0) return EXIT_SUCCESS;
@@ -45,26 +51,45 @@ int main(int __unused argc, char **argv) {
     if (read == NULL) return EXIT_FAILURE;
 
     srand(time(NULL));
+
     sprintf(tmpfile, "%s.%d", datafile, rand());
     write = fopen(tmpfile, "w");
     if (write == NULL) return EXIT_FAILURE;
 
-    // TODO Aging
+    sprintf(agedfile, "%s.%d", datafile, rand());
+    aged = fopen(agedfile, "w");
+    if (aged == NULL) return EXIT_FAILURE;
+
     while (fgets(line, sizeof line, read) != NULL) {
         sscanf(line, "%[^|]|%f|%d\n", pth, &rank, &timestamp);
         if (stat(pth, &s) == 0 && s.st_mode & S_IFDIR ) {
+            rank_sum += rank;
             if (strcmp(pth, argv[1]) == 0) {
                 fprintf(write, "%s|%f|%d\n", pth, rank + 1, (int) epoch);
+                fprintf(aged, "%s|%f|%d\n", pth, rank * 1, (int) epoch);
                 found = 1;
-            } else if (rank >= 1) fprintf(write, "%s", line);
+            } else if (rank >= 1) {
+                fprintf(write, "%s", line);
+                fprintf(aged, "%s|%f|%d\n", pth, rank * MULTIPLIER, timestamp);
+            }
         }
     }
-    if (!found) fprintf(write, "%s|1|%d\n", argv[1], (int) epoch);
+    if (!found) {
+        fprintf(write, "%s|1|%d\n", argv[1], (int) epoch);
+        fprintf(aged, "%s|1|%d\n", argv[1], (int) epoch);
+    }
 
     fclose(read);
     fclose(write);
+    fclose(aged);
 
-    if (rename(tmpfile, datafile) == 0) return EXIT_SUCCESS;
+    if (rank_sum > RANK_SUM_MAX) {
+        if (rename(agedfile, datafile) != 0) return EXIT_FAILURE;
+        if (unlink(tmpfile) != 0) return EXIT_FAILURE;
+    } else {
+        if (rename(tmpfile, datafile) != 0) return EXIT_FAILURE;
+        if (unlink(agedfile) != 0) return EXIT_FAILURE;
+    }
 
-    return EXIT_FAILURE;
+    return EXIT_SUCCESS;
 }
