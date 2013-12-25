@@ -23,6 +23,9 @@ int main() {
 
     if (getcwd(cwd, sizeof(cwd)) == NULL) return EXIT_FAILURE;
 
+    // Don't track $HOME
+    if (strcmp(cwd, getenv("HOME")) == 0) return EXIT_SUCCESS;
+
     _Z_DATA = getenv("_Z_DATA");
     if( _Z_DATA == NULL ) {
         sprintf(datafile, "%s/.z", getenv("HOME"));
