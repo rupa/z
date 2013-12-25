@@ -8,7 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 
-int main(int argc, char **argv) {
+int main(int __unused argc, char **argv) {
 
     if (argv[1] == NULL) return EXIT_FAILURE;
 
