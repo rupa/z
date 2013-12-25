@@ -154,13 +154,21 @@ _z() {
 
 alias ${_Z_CMD:-z}='_z 2>&1'
 
+[ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
+
 if compctl >/dev/null 2>&1; then
     # zsh
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list, avoid clobbering any other precmds.
-        _z_precmd() {
-            /usr/local/bin/_z_prompt_command
-        }
+        if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
+            _z_precmd() {
+                /usr/local/bin/_z_prompt_command "${PWD:a}"
+            }
+        else
+            _z_precmd() {
+                /usr/local/bin/_z_prompt_command "${PWD:A}"
+            }
+        fi
         [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
             precmd_functions[$(($#precmd_functions+1))]=_z_precmd
         }
@@ -179,7 +187,7 @@ elif complete >/dev/null 2>&1; then
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z_prompt_command" <<< "$PROMPT_COMMAND" >/dev/null || {
-            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n'"/usr/local/bin/_z_prompt_command;"
+            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''/usr/local/bin/_z_prompt_command "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)";'
         }
     }
 fi

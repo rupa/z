@@ -61,6 +61,7 @@ NOTES
        Optionally:
               Set $_Z_CMD to change the command name (default z).
               Set $_Z_DATA to change the datafile (default $HOME/.z).
+              Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
               Set  $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd your-
               self.
               Set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
@@ -110,6 +111,10 @@ ENVIRONMENT
 
        The environment variable $_Z_DATA can be used to control  the  datafile
        location. If it is not defined, the location defaults to $HOME/.z.
+
+       The  environment variable $_Z_NO_RESOLVE_SYMLINKS can be set to prevent
+       resolving of symlinks. If  it  is  not  set,  symbolic  links  will  be
+       resolved when added to the datafile.
 
        In bash, z appends a command to the PROMPT_COMMAND environment variable
        to maintain its database. In zsh, z appends a function _z_precmd to the

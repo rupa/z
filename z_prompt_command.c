@@ -7,24 +7,24 @@
 #include <time.h>
 #include <unistd.h>
 
-int main() {
+int main(int argc, char **argv) {
+
+    if (argv[1] == NULL) return 0;
+
     char * _Z_DATA;
     char datafile[PATH_MAX];
     char tmpfile[PATH_MAX];
     FILE *read;
     FILE *write;
     char line[LINE_MAX];
-    char cwd[PATH_MAX];
     char pth[PATH_MAX];
     float rank;
     int timestamp;
     time_t epoch = time(NULL);
     int found = 0;
 
-    if (getcwd(cwd, sizeof(cwd)) == NULL) return EXIT_FAILURE;
-
     // Don't track $HOME
-    if (strcmp(cwd, getenv("HOME")) == 0) return EXIT_SUCCESS;
+    if (strcmp(argv[1], getenv("HOME")) == 0) return EXIT_SUCCESS;
 
     _Z_DATA = getenv("_Z_DATA");
     if( _Z_DATA == NULL ) {
@@ -42,12 +42,12 @@ int main() {
 
     while (fgets(line, sizeof line, read) != NULL) {
         sscanf(line, "%[^|]|%f|%d\n", pth, &rank, &timestamp);
-        if (strcmp(pth, cwd) == 0) {
+        if (strcmp(pth, argv[1]) == 0) {
             fprintf(write, "%s|%f|%d\n", pth, rank + 1, (int) epoch);
             found = 1;
         } else fprintf(write, "%s", line);
     }
-    if (!found) fprintf(write, "%s|1|%d\n", cwd, (int) epoch);
+    if (!found) fprintf(write, "%s|1|%d\n", argv[1], (int) epoch);
 
     fclose(read);
     fclose(write);
