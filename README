@@ -46,6 +46,10 @@ EXAMPLES
 
 NOTES
    Installation:
+       Compile and install the C component:
+              make
+              make install
+
        Put something like this in your $HOME/.bashrc or $HOME/.zshrc:
 
               . /path/to/z.sh
