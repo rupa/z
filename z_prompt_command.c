@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -20,6 +21,7 @@ int main(int argc, char **argv) {
     char pth[PATH_MAX];
     float rank;
     int timestamp;
+    struct stat s;
     time_t epoch = time(NULL);
     int found = 0;
 
@@ -42,10 +44,12 @@ int main(int argc, char **argv) {
 
     while (fgets(line, sizeof line, read) != NULL) {
         sscanf(line, "%[^|]|%f|%d\n", pth, &rank, &timestamp);
-        if (strcmp(pth, argv[1]) == 0) {
-            fprintf(write, "%s|%f|%d\n", pth, rank + 1, (int) epoch);
-            found = 1;
-        } else fprintf(write, "%s", line);
+        if (stat(pth, &s) == 0 && s.st_mode & S_IFDIR ) {
+            if (strcmp(pth, argv[1]) == 0) {
+                fprintf(write, "%s|%f|%d\n", pth, rank + 1, (int) epoch);
+                found = 1;
+            } else if (rank >= 1) fprintf(write, "%s", line);
+        }
     }
     if (!found) fprintf(write, "%s|1|%d\n", argv[1], (int) epoch);
 
