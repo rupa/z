@@ -28,6 +28,13 @@ int main(int __unused argc, char **argv) {
     // Don't track $HOME
     if (strcmp(argv[1], getenv("HOME")) == 0) return EXIT_SUCCESS;
 
+    // TODO
+    //        # don't track excluded dirs
+    //        local exclude
+    //        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
+    //            [ "$*" = "$exclude" ] && return
+    //        done
+
     _Z_DATA = getenv("_Z_DATA");
     if( _Z_DATA == NULL ) {
         sprintf(datafile, "%s/.z", getenv("HOME"));
@@ -42,6 +49,7 @@ int main(int __unused argc, char **argv) {
     write = fopen(tmpfile, "w");
     if (write == NULL) return EXIT_FAILURE;
 
+    // TODO Aging
     while (fgets(line, sizeof line, read) != NULL) {
         sscanf(line, "%[^|]|%f|%d\n", pth, &rank, &timestamp);
         if (stat(pth, &s) == 0 && s.st_mode & S_IFDIR ) {
