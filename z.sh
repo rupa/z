@@ -33,56 +33,8 @@ _z() {
     # bail if we don't own ~/.z (we're another user but our ENV is still set)
     [ -f "$datafile" -a ! -O "$datafile" ] && return
 
-    # add entries
-    if [ "$1" = "--add" ]; then
-        shift
-
-        # $HOME isn't worth matching
-        [ "$*" = "$HOME" ] && return
-
-        # don't track excluded dirs
-        local exclude
-        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            [ "$*" = "$exclude" ] && return
-        done
-
-        # maintain the data file
-        local tempfile="$datafile.$RANDOM"
-        while read line; do
-            # only count directories
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v path="$*" -v now="$(date +%s)" -F"|" '
-            BEGIN {
-                rank[path] = 1
-                time[path] = now
-            }
-            $2 >= 1 {
-                # drop ranks below 1
-                if( $1 == path ) {
-                    rank[$1] = $2 + 1
-                    time[$1] = now
-                } else {
-                    rank[$1] = $2
-                    time[$1] = $3
-                }
-                count += $2
-            }
-            END {
-                if( count > 6000 ) {
-                    # aging
-                    for( x in rank ) print x "|" 0.99*rank[x] "|" time[x]
-                } else for( x in rank ) print x "|" rank[x] "|" time[x]
-            }
-        ' 2>/dev/null >| "$tempfile"
-        # do our best to avoid clobbering the datafile in a race condition
-        if [ $? -ne 0 -a -f "$datafile" ]; then
-            env rm -f "$tempfile"
-        else
-            env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
-        fi
-
     # tab completion
-    elif [ "$1" = "--complete" ]; then
+    if [ "$1" = "--complete" ]; then
         while read line; do
             [ -d "${line%%\|*}" ] && echo $line
         done < "$datafile" | awk -v q="$2" -F"|" '
@@ -202,21 +154,13 @@ _z() {
 
 alias ${_Z_CMD:-z}='_z 2>&1'
 
-[ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
-
 if compctl >/dev/null 2>&1; then
     # zsh
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list, avoid clobbering any other precmds.
-        if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
-            _z_precmd() {
-                _z --add "${PWD:a}"
-            }
-        else
-            _z_precmd() {
-                _z --add "${PWD:A}"
-            }
-        fi
+        _z_precmd() {
+            /usr/local/bin/_z_prompt_command
+        }
         [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
             precmd_functions[$(($#precmd_functions+1))]=_z_precmd
         }
@@ -234,8 +178,8 @@ elif complete >/dev/null 2>&1; then
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
-        grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
-            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'
+        grep "_z_prompt_command" <<< "$PROMPT_COMMAND" >/dev/null || {
+            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n'"/usr/local/bin/_z_prompt_command;"
         }
     }
 fi
