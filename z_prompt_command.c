@@ -9,7 +9,7 @@
 
 int main(int argc, char **argv) {
 
-    if (argv[1] == NULL) return 0;
+    if (argv[1] == NULL) return EXIT_FAILURE;
 
     char * _Z_DATA;
     char datafile[PATH_MAX];
