@@ -1,6 +1,6 @@
 // PROMPT_COMMAND for z.sh
 
-#include <limits.h>
+#include <linux/limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -8,7 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 
-int main(int __unused argc, char **argv) {
+int main(int argc __attribute__((unused)), char **argv) {
 
     if (argv[1] == NULL) return EXIT_FAILURE;
 
@@ -22,7 +22,7 @@ int main(int __unused argc, char **argv) {
     FILE *read;
     FILE *write;
     FILE *aged;
-    char line[LINE_MAX];
+    char line[PATH_MAX * 2];
     char pth[PATH_MAX];
     float rank;
     int timestamp;
