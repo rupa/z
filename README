@@ -43,9 +43,13 @@ EXAMPLES
 
 NOTES
    Installation:
-       Put something like this in your $HOME/.bashrc or $HOME/.zshrc:
+       Put something like this in your $HOME/.bashrc, $HOME/.zshrc or $HOME/.bash_profile:
 
               . /path/to/z.sh
+
+       Set the appropriate write access for z.sh:
+
+              chmod 775 z.sh
 
        cd around for a while to build up the db.
 
