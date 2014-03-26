@@ -33,10 +33,15 @@ _z() {
     # bail if we don't own ~/.z (we're another user but our ENV is still set)
     [ -f "$datafile" -a ! -O "$datafile" ] && return
 
+    local exclude;
+
     # tab completion
     if [ "$1" = "--complete" ]; then
         while read line; do
             [ -d "${line%%\|*}" ] && echo $line
+            for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
+                [ "${line%%\|*}" = "$exclude" ] && continue
+            done
         done < "$datafile" | awk -v q="$2" -F"|" '
             BEGIN {
                 if( q == tolower(q) ) imatch = 1
@@ -78,6 +83,9 @@ _z() {
         local cd
         cd="$(while read line; do
             [ -d "${line%%\|*}" ] && echo $line
+            for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
+                [ "${line%%\|*}" = "$exclude" ] && continue
+            done
         done < "$datafile" | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time

@@ -35,15 +35,6 @@ int main(int argc, char **argv) {
     /* Don't track $HOME */
     if (strcmp(argv[1], getenv("HOME")) == 0) return EXIT_SUCCESS;
 
-    /*
-        TODO
-        # don't track excluded dirs
-        local exclude
-        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            [ "$*" = "$exclude" ] && return
-        done
-    */
-
     _Z_DATA = getenv("_Z_DATA");
     if( _Z_DATA == NULL ) {
         sprintf(datafile, "%s/.z", getenv("HOME"));
