@@ -8,9 +8,7 @@
 #include <time.h>
 #include <unistd.h>
 
-int main(int __unused argc, char **argv) {
-
-    if (argv[1] == NULL) return EXIT_FAILURE;
+int main(int argc, char **argv) {
 
     static const float MULTIPLIER = 0.99;
     static const int RANK_SUM_MAX = 6000;
@@ -30,6 +28,9 @@ int main(int __unused argc, char **argv) {
     time_t epoch = time(NULL);
     int found = 0;
     float rank_sum = 0;
+
+    (void)argc;
+    if (argv[1] == NULL) return EXIT_FAILURE;
 
     /* Don't track $HOME */
     if (strcmp(argv[1], getenv("HOME")) == 0) return EXIT_SUCCESS;
