@@ -1,4 +1,4 @@
-// PROMPT_COMMAND for z.sh
+/* PROMPT_COMMAND for z.sh */
 
 #include <limits.h>
 #include <stdio.h>
@@ -31,15 +31,17 @@ int main(int __unused argc, char **argv) {
     int found = 0;
     float rank_sum = 0;
 
-    // Don't track $HOME
+    /* Don't track $HOME */
     if (strcmp(argv[1], getenv("HOME")) == 0) return EXIT_SUCCESS;
 
-    // TODO
-    //        # don't track excluded dirs
-    //        local exclude
-    //        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-    //            [ "$*" = "$exclude" ] && return
-    //        done
+    /*
+        TODO
+        # don't track excluded dirs
+        local exclude
+        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
+            [ "$*" = "$exclude" ] && return
+        done
+    */
 
     _Z_DATA = getenv("_Z_DATA");
     if( _Z_DATA == NULL ) {
