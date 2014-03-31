@@ -113,7 +113,7 @@ _z() {
                     t) local typ="recent";;
                 esac; opt=${opt:1}; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
-        esac; local last=$1; [ "$2" ] && shift; done
+        esac; local last=$1; [ "$#" -gt 0 ] && shift; done
         [ "$fnd" -a "$fnd" != "^$PWD " ] || local list=1
 
         # if we hit enter on a completion just go there
