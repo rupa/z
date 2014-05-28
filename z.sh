@@ -105,7 +105,7 @@ _z() {
             -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
                     h) echo "${_Z_CMD:-z} [-chlrtx] args" >&2; return;;
-                    x) sed -i "\:^${PWD}|.*:d" "$datafile";;
+                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
                     l) local list=1;;
                     r) local typ="rank";;
                     t) local typ="recent";;
@@ -235,7 +235,7 @@ elif complete >/dev/null 2>&1; then
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
-            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'
+            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''_z --add "$(command pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'
         }
     }
 fi
