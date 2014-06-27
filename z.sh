@@ -82,7 +82,7 @@ _z() {
         fi
 
     # tab completion
-    elif [ "$1" = "--complete" ]; then
+    elif [ "$1" = "--complete" -a -s "$datafile" ]; then
         while read line; do
             [ -d "${line%%\|*}" ] && echo $line
         done < "$datafile" | awk -v q="$2" -F"|" '
