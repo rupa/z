@@ -82,6 +82,9 @@ Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
 Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
 .RE
 .RS
+Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
+.RE
+.RS
 (These settings should go in .bashrc/.zshrc before the line added above.)
 .RE
 .RS
@@ -144,6 +147,9 @@ handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
 The environment variable \fB$_Z_EXCLUDE_DIRS\fR can be set to an array of
 directories to exclude from tracking. \fB$HOME\fR is always excluded.
 Directories must be full paths without trailing slashes.
+.P
+The environment variable \fB$_Z_OWNER\fR can be set to your username, to
+allow usage of \fBz\fR when your sudo enviroment keeps \fB$HOME\fR set.
 .SH
 FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the
