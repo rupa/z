@@ -13,6 +13,7 @@
 #         set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
 #         set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #         set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
+#         set $_Z_OWNER to your username if you want use z while sudo with $HOME kept
 #
 # USE:
 #     * z foo     # cd to most frecent dir matching foo
@@ -30,8 +31,8 @@ _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
 
-    # bail if we don't own ~/.z (we're another user but our ENV is still set)
-    [ -f "$datafile" -a ! -O "$datafile" ] && return
+    # bail if we don't own ~/.z and $_Z_OWNER not set
+    [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     # add entries
     if [ "$1" = "--add" ]; then
@@ -78,6 +79,7 @@ _z() {
         if [ $? -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
+	    [ -n "$_Z_OWNER" ] && chown $_Z_OWNER:$(id -ng $_Z_OWNER) "$tempfile"
             env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
         fi
 
