@@ -69,7 +69,7 @@ _z() {
                 count += $2
             }
             END {
-                if( count > 6000 ) {
+                if( count > 9000 ) {
                     # aging
                     for( x in rank ) print x "|" 0.99*rank[x] "|" time[x]
                 } else for( x in rank ) print x "|" rank[x] "|" time[x]
