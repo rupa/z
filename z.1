@@ -87,6 +87,9 @@ Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
 Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
 .RE
 .RS
+set \fB$_Z_NO_PRUNE\fR if you want to prevent entries that do not exist from removal (useful if you have network drives - entries will still age out).
+.RE
+.RS
 (These settings should go in .bashrc/.zshrc before the line added above.)
 .RE
 .RS

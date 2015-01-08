@@ -14,6 +14,8 @@
 #         set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #         set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
 #         set $_Z_OWNER to your username if you want use z while sudo with $HOME kept
+#         set $_Z_NO_PRUNE if you want to prevent entries that do not exist from removal (useful if you have network drives - entries will still age out).
+
 #
 # USE:
 #     * z foo     # cd to most frecent dir matching foo
@@ -51,7 +53,7 @@ _z() {
         local tempfile="$datafile.$RANDOM"
         while read line; do
             # only count directories
-            [ -d "${line%%\|*}" ] && echo $line
+            [ -d "${line%%\|*}" -o "$_Z_NO_PRUNE" ] && echo $line
         done < "$datafile" | awk -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
