@@ -44,7 +44,7 @@ _z() {
         # don't track excluded dirs
         local exclude
         for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            [ "$*" = "$exclude" ] && return
+            [[ "$*" == "$exclude"* ]] && return
         done
 
         # maintain the data file
@@ -119,7 +119,7 @@ _z() {
         # if we hit enter on a completion just go there
         case "$last" in
             # completions will always start with /
-            /*) [ -z "$list" -a -d "$last" ] && cd "$last" && return;;
+            /*) [ -z "$list" -a -d "$last" ] && builtin cd "$last" && return;;
         esac
 
         # no file yet
@@ -198,7 +198,7 @@ _z() {
             }
         ')"
         [ $? -gt 0 ] && return
-        [ "$cd" ] && cd "$cd"
+        [ "$cd" ] && builtin cd "$cd"
     fi
 }
 
@@ -220,7 +220,7 @@ if compctl >/dev/null 2>&1; then
             }
         fi
         [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
-            precmd_functions[$(($#precmd_functions+1))]=_z_precmd
+            add-zsh-hook precmd _z_precmd
         }
     }
     _z_zsh_tab_completion() {
