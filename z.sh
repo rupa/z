@@ -44,7 +44,7 @@ _z() {
         # don't track excluded dirs
         local exclude
         for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            [[ "$*" == $exclude* ]] && return
+            [[ "$*" == "$exclude"* ]] && return
         done
 
         # maintain the data file
