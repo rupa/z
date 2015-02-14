@@ -41,10 +41,10 @@ _z() {
         # $HOME isn't worth matching
         [ "$*" = "$HOME" ] && return
 
-        # don't track excluded dirs
+        # don't track excluded directory trees
         local exclude
         for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            [ "$*" = "$exclude" ] && return
+            case "$*" in $exclude*) return;; esac
         done
 
         # maintain the data file

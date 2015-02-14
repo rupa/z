@@ -81,7 +81,7 @@ Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
 Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
 .RE
 .RS
-Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
+Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directory trees to exclude.
 .RE
 .RS
 Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
@@ -147,7 +147,7 @@ The environment variable \fB$_Z_NO_PROMPT_COMMAND\fR can be set if you want to
 handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
 .P
 The environment variable \fB$_Z_EXCLUDE_DIRS\fR can be set to an array of
-directories to exclude from tracking. \fB$HOME\fR is always excluded.
+directory trees to exclude from tracking. \fB$HOME\fR is always excluded.
 Directories must be full paths without trailing slashes.
 .P
 The environment variable \fB$_Z_OWNER\fR can be set to your username, to
