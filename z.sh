@@ -109,6 +109,7 @@ _z() {
                     h) echo "${_Z_CMD:-z} [-chlrtx] args" >&2; return;;
                     x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
                     l) local list=1;;
+                    p) local printonly=1;;
                     r) local typ="rank";;
                     t) local typ="recent";;
                 esac; opt=${opt:1}; done;;
@@ -198,7 +199,11 @@ _z() {
             }
         ')"
         [ $? -gt 0 ] && return
-        [ "$cd" ] && cd "$cd"
+        if [ -n "$printonly" ] ; then
+          echo "$cd"
+        else
+          [ "$cd" ] && cd "$cd"
+        fi
     fi
 }
 
