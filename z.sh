@@ -163,7 +163,7 @@ _z() {
                 # use a copy to escape special characters, as we want to return
                 # the original. yeah, this escaping is awful.
                 clean_short = short
-                gsub(/[\(\)\[\]\|]/, "\\\\&", clean_short)
+                gsub(/\[\(\)\[\]\|\]/, "\\\\&", clean_short)
                 for( x in matches ) if( matches[x] && x !~ clean_short ) return
                 return short
             }
