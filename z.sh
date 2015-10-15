@@ -31,6 +31,9 @@ _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
 
+    # dereference symlinks
+    [ -h $datafile ] && datafile=$(readlink -nf $datafile)
+
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
