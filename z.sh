@@ -31,9 +31,6 @@ _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
 
-    # dereference symlinks
-    [ -h $datafile ] && datafile=$(readlink -nf $datafile)
-
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
@@ -83,7 +80,8 @@ _z() {
             env rm -f "$tempfile"
         else
             [ "$_Z_OWNER" ] && chown $_Z_OWNER:$(id -ng $_Z_OWNER) "$tempfile"
-            env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
+            env cp -f "$tempfile" "$datafile"
+            env rm -f "$tempfile"
         fi
 
     # tab completion
