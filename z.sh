@@ -27,9 +27,27 @@
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
 
+_dereference() {
+    local file=$1
+    cd `dirname $file`
+    local name=`basename $file`
+    while [ -h "$file" ]
+    do
+        file=`readlink $name`
+        cd `dirname $file`
+        name=`basename $file`
+    done
+
+    local dir=`pwd -P`
+    echo "$dir/$name"
+}
+
 _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
+
+    # dereference symlinks
+    [ -h $datafile ] && datafile=$(_dereference $datafile)
 
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
