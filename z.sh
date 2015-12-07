@@ -1,15 +1,18 @@
 # Copyright (c) 2009 rupa deadwyler under the WTFPL license
+# https://github.com/rupa/z
 
 # maintains a jump-list of the directories you actually use
 #
 # INSTALL:
-#     * put something like this in your .bashrc/.zshrc:
+#     1) put something like this in your ~/.bashrc or ~/.zshrc file:
 #         . /path/to/z.sh
-#     * cd around for a while to build up the db
-#     * PROFIT!!
+#     2) make it instantly available by typing: source ~/.bashrc (or source ~/.zshrc)
+#     3) cd around for a while to build up the db
+#     4) PROFIT!!
+#
 #     * optionally:
-#         set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
-#         set $_Z_DATA in .bashrc/.zshrc to change the datafile (default ~/.z).
+#         set $_Z_CMD in ~/.bashrc or ~/.zshrc to change the command (default z).
+#         set $_Z_DATA in ~/.bashrc or ~/.zshrc to change the datafile (default ~/.z).
 #         set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
 #         set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #         set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
