@@ -106,7 +106,7 @@ _z() {
             --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
             -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
-                    e) local nocd=1;;
+                    e) local echo=echo;;
                     h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
                     l) local list=1;;
                     r) local typ="rank";;
@@ -200,11 +200,7 @@ _z() {
         ')"
         [ $? -gt 0 ] && return
         [ "$cd" ] || return
-        if [ "$nocd" ]; then
-            echo "$cd"
-        else
-            cd "$cd"
-        fi
+        ${echo:-cd} "$cd"
     fi
 }
 
