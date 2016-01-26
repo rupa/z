@@ -106,11 +106,12 @@ _z() {
             --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
             -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
-                    h) echo "${_Z_CMD:-z} [-chlrtx] args" >&2; return;;
-                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
+                    e) local nocd=1;;
+                    h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
                     l) local list=1;;
                     r) local typ="rank";;
                     t) local typ="recent";;
+                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
                 esac; opt=${opt:1}; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
         esac; local last=$1; [ "$#" -gt 0 ] && shift; done
@@ -198,7 +199,12 @@ _z() {
             }
         ')"
         [ $? -gt 0 ] && return
-        [ "$cd" ] && cd "$cd"
+        [ "$cd" ] || return
+        if [ "$nocd" ]; then
+            echo "$cd"
+        else
+            cd "$cd"
+        fi
     fi
 }
 

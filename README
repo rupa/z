@@ -23,6 +23,8 @@ DESCRIPTION
 OPTIONS
        -c     restrict matches to subdirectories of the current directory
 
+       -e     echo the best match, don't cd
+
        -h     show a brief help message
 
        -l     list only
