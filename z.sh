@@ -27,6 +27,10 @@
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
 
+# suppress complaints from bash about this array not existing. we check both,
+# assuming only or the other will be "full".
+[ "${pipestatus+1}" ] || declare -A pipestatus
+
 _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
@@ -75,8 +79,10 @@ _z() {
                 } else for( x in rank ) print x "|" rank[x] "|" time[x]
             }
         ' 2>/dev/null >| "$tempfile"
-        # do our best to avoid clobbering the datafile in a race condition
-        if [ $? -ne 0 -a -f "$datafile" ]; then
+        # do our best to avoid clobbering the datafile in a race condition.
+        # bash uses PIPESTATUS, zsh uses pipestatus, only one or the other
+        # should be set.
+        if [ ${PIPESTATUS[-1]}${pipestatus[-1]} -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
             [ "$_Z_OWNER" ] && chown $_Z_OWNER:$(id -ng $_Z_OWNER) "$tempfile"
@@ -198,7 +204,7 @@ _z() {
                 }
             }
         ')"
-        [ $? -gt 0 ] && return
+        [ ${PIPESTATUS[-1]}${pipestatus[-1]} -ne 0 ] && return
         [ "$cd" ] || return
         ${echo:-cd} "$cd"
     fi
