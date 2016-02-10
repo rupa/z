@@ -60,10 +60,11 @@ NOTES
               Set $_Z_CMD to change the command name (default z).
               Set $_Z_DATA to change the datafile (default $HOME/.z).
               Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
-              Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
+              Set  $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd your-
               self.
               Set $_Z_EXCLUDE_DIRS to an array of directory trees to  exclude.
               Set $_Z_OWNER to allow usage when in 'sudo -s' mode.
+              Set $_Z_DECAY_RANK to set the aging threshold (default: 9000).
               (These  settings  should  go  in  .bashrc/.zshrc before the line
               added above.)
               Install   the   provided   man   page   z.1    somewhere    like
@@ -72,8 +73,8 @@ NOTES
    Aging:
        The rank of directories maintained by z undergoes aging based on a sim-
        ple formula. The rank of each entry is incremented  every  time  it  is
-       accessed.  When the sum of ranks is over 9000, all ranks are multiplied
-       by 0.99. Entries with a rank lower than 1 are forgotten.
+       accessed.  When  the sum of ranks exceeds $_Z_DECAY_RANK, all ranks are
+       multiplied by 0.99.  Entries with a rank lower than 1 are forgotten.
 
    Frecency:
        Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted

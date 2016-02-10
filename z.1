@@ -90,6 +90,9 @@ Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directory trees to exclude.
 Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
 .RE
 .RS
+Set \fB$_Z_DECAY_RANK\fR to set the aging threshold (default: 9000).
+.RE
+.RS
 (These settings should go in .bashrc/.zshrc before the line added above.)
 .RE
 .RS
@@ -99,8 +102,8 @@ Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fR
 Aging:
 The rank of directories maintained by \fBz\fR undergoes aging based on a simple
 formula. The rank of each entry is incremented every time it is accessed. When
-the sum of ranks is over 9000, all ranks are multiplied by 0.99. Entries with a
-rank lower than 1 are forgotten.
+the sum of ranks exceeds $_Z_DECAY_RANK, all ranks are multiplied by 0.99.
+Entries with a rank lower than 1 are forgotten.
 .SS
 Frecency:
 Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted rank
