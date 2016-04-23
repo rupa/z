@@ -34,6 +34,14 @@ _z() {
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
+    _z_dirs () {
+      while read line; do
+        # only count directories
+        [ -d "${line%%\|*}" ] && echo $line
+      done < "$datafile"
+      return 0
+    }
+
     # add entries
     if [ "$1" = "--add" ]; then
         shift
@@ -49,10 +57,7 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        while read line; do
-            # only count directories
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v path="$*" -v now="$(date +%s)" -F"|" '
+        awk < <( _z_dirs ) -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -75,7 +80,7 @@ _z() {
                 } else for( x in rank ) print x "|" rank[x] "|" time[x]
             }
         ' 2>/dev/null >| "$tempfile"
-        # do our best to avoid clobbering the datafile in a race condition
+        # do our best to avoid clobbering the datafile in a race condition.
         if [ $? -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
@@ -127,9 +132,7 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$(while read line; do
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time
                 dx = t - time
@@ -198,9 +201,8 @@ _z() {
                 }
             }
         ')"
-        [ $? -gt 0 ] && return
-        [ "$cd" ] || return
-        ${echo:-cd} "$cd"
+
+        [ $? -eq 0 ] && [ "$cd" ] && ${echo:-cd} "$cd"
     fi
 }
 
