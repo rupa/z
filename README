@@ -66,8 +66,8 @@ NOTES
               Set $_Z_OWNER to allow usage when in 'sudo -s' mode.
               (These  settings  should  go  in  .bashrc/.zshrc before the line
               added above.)
-              Install   the   provided   man   page   z.1    somewhere    like
-              /usr/local/man/man1.
+              Install the provided man page z.1  somewhere  in  your  MANPATH,
+              like /usr/local/man/man1.
 
    Aging:
        The rank of directories maintained by z undergoes aging based on a sim-
