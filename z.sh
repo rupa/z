@@ -218,11 +218,11 @@ if type compctl >/dev/null 2>&1; then
         # populate directory list, avoid clobbering any other precmds.
         if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
             _z_precmd() {
-                _z --add "${PWD:a}"
+                (_z --add "${PWD:a}" &)
             }
         else
             _z_precmd() {
-                _z --add "${PWD:A}"
+                (_z --add "${PWD:A}" &)
             }
         fi
         [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
