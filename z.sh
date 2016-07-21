@@ -202,7 +202,9 @@ _z() {
             }
         ')"
 
-        [ $? -eq 0 ] && [ "$cd" ] && $echo builtin cd "$cd"
+        [ $? -eq 0 ] && [ "$cd" ] && {
+          if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
+        }
     fi
 }
 
