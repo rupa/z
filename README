@@ -36,9 +36,9 @@ OPTIONS
        -x     remove the current directory from the datafile
 
 EXAMPLES
-       z foo         cd to most frecent dir matching foo
+       z foo         cd to most frequent dir matching foo
 
-       z foo bar     cd to most frecent dir matching foo, then bar
+       z foo bar     cd to most frequent dir matching foo, then bar
 
        z -r foo      cd to highest ranked dir matching foo
 
