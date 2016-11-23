@@ -14,7 +14,7 @@ AVAILABILITY
 DESCRIPTION
        Tracks your most used directories, based on 'frecency'.
 
-       After  a  short  learning  phase, z will take you to the most 'frecent'
+       After  a  short  learning  phase, z will take you to the most 'frequent'
        directory that matches ALL of the regexes given on the command line, in
        order.
 
