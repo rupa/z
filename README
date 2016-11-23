@@ -12,9 +12,9 @@ AVAILABILITY
        bash, zsh
 
 DESCRIPTION
-       Tracks your most used directories, based on 'frecency'.
+       Tracks your most used directories, based on 'Frequency'.
 
-       After  a  short  learning  phase, z will take you to the most 'frecent'
+       After  a  short  learning  phase, z will take you to the most 'frequent'
        directory that matches ALL of the regexes given on the command line, in
        order.
 
@@ -36,15 +36,15 @@ OPTIONS
        -x     remove the current directory from the datafile
 
 EXAMPLES
-       z foo         cd to most frecent dir matching foo
+       z foo         cd to most frequent dir matching foo
 
-       z foo bar     cd to most frecent dir matching foo, then bar
+       z foo bar     cd to most frequent dir matching foo, then bar
 
        z -r foo      cd to highest ranked dir matching foo
 
        z -t foo      cd to most recently accessed dir matching foo
 
-       z -l foo      list all dirs matching foo (by frecency)
+       z -l foo      list all dirs matching foo (by Frequency)
 
 NOTES
    Installation:
@@ -75,8 +75,8 @@ NOTES
        accessed.  When the sum of ranks is over 9000, all ranks are multiplied
        by 0.99. Entries with a rank lower than 1 are forgotten.
 
-   Frecency:
-       Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted
+   Frequency:
+       Frequency is a portmanteau of 'recent' and 'frequency'. It is a weighted
        rank  that depends on how often and how recently something occurred. As
        far as I know, Mozilla came up with the term.
 
@@ -84,7 +84,7 @@ NOTES
        will  quickly  have  higher rank than a directory accessed frequently a
        long time ago.
 
-       Frecency is determined at runtime.
+       Frequency is determined at runtime.
 
    Common:
        When multiple directories match all queries, and they all have a common
