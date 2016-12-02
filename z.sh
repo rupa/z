@@ -108,7 +108,7 @@ _z() {
     else
         # list/go
         while [ "$1" ]; do case "$1" in
-            --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
+            --) while [ "$2" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
             -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
                     e) local echo=echo;;
