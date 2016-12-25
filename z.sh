@@ -16,8 +16,8 @@
 #         set $_Z_OWNER to your username if you want use z while sudo with $HOME kept
 #
 # USE:
-#     * z foo     # cd to most frecent dir matching foo
-#     * z foo bar # cd to most frecent dir matching foo and bar
+#     * z foo     # cd to most frequent dir matching foo
+#     * z foo bar # cd to most frequent dir matching foo and bar
 #     * z -r foo  # cd to highest ranked dir matching foo
 #     * z -t foo  # cd to most recently accessed dir matching foo
 #     * z -l foo  # list matches instead of cd
