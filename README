@@ -60,28 +60,28 @@ NOTES
               Set $_Z_CMD to change the command name (default z).
               Set $_Z_DATA to change the datafile (default $HOME/.z).
               Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
-              Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
+              Set  $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd your-
               self.
-              Set $_Z_EXCLUDE_DIRS to an array of directory trees to  exclude.
+              Set $_Z_EXCLUDE_DIRS to an array of directory trees to exclude.
               Set $_Z_OWNER to allow usage when in 'sudo -s' mode.
-              (These  settings  should  go  in  .bashrc/.zshrc before the line
+              (These settings should go  in  .bashrc/.zshrc  before  the  line
               added above.)
-              Install the provided man page z.1  somewhere  in  your  MANPATH,
+              Install  the  provided  man  page z.1 somewhere in your MANPATH,
               like /usr/local/man/man1.
 
    Aging:
        The rank of directories maintained by z undergoes aging based on a sim-
-       ple formula. The rank of each entry is incremented  every  time  it  is
-       accessed.  When the sum of ranks is over 9000, all ranks are multiplied
+       ple  formula.  The  rank  of each entry is incremented every time it is
+       accessed. When the sum of ranks is over 9000, all ranks are  multiplied
        by 0.99. Entries with a rank lower than 1 are forgotten.
 
    Frecency:
        Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted
-       rank  that depends on how often and how recently something occurred. As
+       rank that depends on how often and how recently something occurred.  As
        far as I know, Mozilla came up with the term.
 
-       To z, a directory that has low ranking but has been  accessed  recently
-       will  quickly  have  higher rank than a directory accessed frequently a
+       To  z,  a directory that has low ranking but has been accessed recently
+       will quickly have higher rank than a directory  accessed  frequently  a
        long time ago.
 
        Frecency is determined at runtime.
@@ -89,17 +89,17 @@ NOTES
    Common:
        When multiple directories match all queries, and they all have a common
        prefix, z will cd to the shortest matching directory, without regard to
-       priority.  This has been in effect, if  undocumented,  for  quite  some
+       priority.   This  has  been  in effect, if undocumented, for quite some
        time, but should probably be configurable or reconsidered.
 
    Tab Completion:
-       z  supports tab completion. After any number of arguments, press TAB to
+       z supports tab completion. After any number of arguments, press TAB  to
        complete on directories that match each argument. Due to limitations of
-       the  completion  implementations,  only  the last argument will be com-
+       the completion implementations, only the last  argument  will  be  com-
        pleted in the shell.
 
-       Internally, z decides you've requested a completion if the  last  argu-
-       ment  passed  is  an  absolute  path to an existing directory. This may
+       Internally,  z  decides you've requested a completion if the last argu-
+       ment passed is an absolute path to  an  existing  directory.  This  may
        cause unexpected behavior if the last argument to z begins with /.
 
 ENVIRONMENT
@@ -108,30 +108,30 @@ ENVIRONMENT
        The contents of the variable $_Z_CMD is aliased to _z 2>&1. If not set,
        $_Z_CMD defaults to z.
 
-       The  environment  variable $_Z_DATA can be used to control the datafile
+       The environment variable $_Z_DATA can be used to control  the  datafile
        location. If it is not defined, the location defaults to $HOME/.z.
 
-       The environment variable $_Z_NO_RESOLVE_SYMLINKS can be set to  prevent
-       resolving  of  symlinks.  If  it  is  not  set,  symbolic links will be
+       The  environment variable $_Z_NO_RESOLVE_SYMLINKS can be set to prevent
+       resolving of symlinks. If  it  is  not  set,  symbolic  links  will  be
        resolved when added to the datafile.
 
        In bash, z appends a command to the PROMPT_COMMAND environment variable
        to maintain its database. In zsh, z appends a function _z_precmd to the
        precmd_functions array.
 
-       The environment variable $_Z_NO_PROMPT_COMMAND can be set if  you  want
+       The  environment  variable $_Z_NO_PROMPT_COMMAND can be set if you want
        to handle PROMPT_COMMAND or precmd yourself.
 
-       The  environment  variable  $_Z_EXCLUDE_DIRS  can be set to an array of
-       directory trees to exclude from tracking.  $HOME  is  always  excluded.
+       The environment variable $_Z_EXCLUDE_DIRS can be set  to  an  array  of
+       directory  trees  to  exclude  from tracking. $HOME is always excluded.
        Directories must be full paths without trailing slashes.
 
-       The  environment  variable  $_Z_OWNER  can  be set to your username, to
-       allow usage of z when your sudo enviroment keeps $HOME set.
+       The environment variable $_Z_OWNER can be  set  to  your  username,  to
+       allow usage of z when your sudo environment keeps $HOME set.
 
 FILES
-       Data is stored in $HOME/.z. This  can  be  overridden  by  setting  the
-       $_Z_DATA  environment variable. When initialized, z will raise an error
+       Data  is  stored  in  $HOME/.z.  This  can be overridden by setting the
+       $_Z_DATA environment variable. When initialized, z will raise an  error
        if this path is a directory, and not function correctly.
 
        A man page (z.1) is provided.
