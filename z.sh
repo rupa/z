@@ -1,4 +1,4 @@
-# Copyright (c) 2009 rupa deadwyler under the WTFPL license
+# Copyright (c) 2009 rupa deadwyler. Licenced under the WTFPL license, Version 2
 
 # maintains a jump-list of the directories you actually use
 #
