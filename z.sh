@@ -34,6 +34,10 @@ _z() {
     # if symlink, dereference
     [ -h "$datafile" ] && datafile=$(readlink "$datafile")
 
+    # if datafile parent directory doesn't exist, create it
+    local datapath=$(dirname "$datafile")
+    [ -d "$datapath" ] || mkdir -p "$datapath"
+
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
