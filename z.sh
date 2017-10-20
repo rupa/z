@@ -37,10 +37,11 @@ _z() {
     # bail if we don't own ~/.z and $_Z_OWNER not set
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
-    _z_dirs () {
+    _z_dirs() {
+        local line
         while read line; do
             # only count directories
-            [ -d "${line%%\|*}" ] && echo $line
+            [ -d "${line%%\|*}" ] && echo "$line"
         done < "$datafile"
         return 0
     }
@@ -92,18 +93,17 @@ _z() {
         fi
 
     # tab completion
-    elif [ "$1" = "--complete" -a -s "$datafile" ]; then
-        while read line; do
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v q="$2" -F"|" '
+    elif [ "$1" = '--complete' -a -s "$datafile" ]; then
+        _z_dirs | awk -v q="$2" -F'|' '
             BEGIN {
-                if( q == tolower(q) ) imatch = 1
                 q = substr(q, 3)
-                gsub(" ", ".*", q)
+                # smart-case
+                if( q == tolower(q) ) imatch = 1
+                gsub(/ /, ".*", q)
             }
             {
                 if( imatch ) {
-                    if( tolower($1) ~ tolower(q) ) print $1
+                    if( tolower($1) ~ q ) print $1
                 } else if( $1 ~ q ) print $1
             }
         ' 2>/dev/null
