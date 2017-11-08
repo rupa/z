@@ -120,6 +120,7 @@ _z() {
                     r) local typ="rank";;
                     t) local typ="recent";;
                     x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
+                    i) local icase=1;;
                 esac; opt=${opt:1}; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
         esac; local last=$1; [ "$#" -gt 0 ] && shift; done
@@ -135,7 +136,7 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v icase="$icase" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time
                 dx = t - time
@@ -184,7 +185,7 @@ _z() {
                 } else if( typ == "recent" ) {
                     rank = $3 - t
                 } else rank = frecent($2, $3)
-                if( $1 ~ q ) {
+                if( $1 ~ q && !icase ) {
                     matches[$1] = rank
                 } else if( tolower($1) ~ tolower(q) ) imatches[$1] = rank
                 if( matches[$1] && matches[$1] > hi_rank ) {
