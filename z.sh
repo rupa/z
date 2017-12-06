@@ -1,4 +1,4 @@
-# Copyright (c) 2009 rupa deadwyler under the WTFPL license
+# Copyright (c) 2009 rupa deadwyler. Licensed under the WTFPL license, Version 2
 
 # maintains a jump-list of the directories you actually use
 #
@@ -13,6 +13,7 @@
 #         set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
 #         set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #         set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
+#         set $_Z_OWNER to your username if you want use z while sudo with $HOME kept
 #
 # USE:
 #     * z foo     # cd to most frecent dir matching foo
@@ -30,8 +31,19 @@ _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
 
-    # bail if we don't own ~/.z (we're another user but our ENV is still set)
-    [ -f "$datafile" -a ! -O "$datafile" ] && return
+    # if symlink, dereference
+    [ -h "$datafile" ] && datafile=$(readlink "$datafile")
+
+    # bail if we don't own ~/.z and $_Z_OWNER not set
+    [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
+
+    _z_dirs () {
+        while read line; do
+            # only count directories
+            [ -d "${line%%\|*}" ] && echo $line
+        done < "$datafile"
+        return 0
+    }
 
     # add entries
     if [ "$1" = "--add" ]; then
@@ -40,18 +52,15 @@ _z() {
         # $HOME isn't worth matching
         [ "$*" = "$HOME" ] && return
 
-        # don't track excluded dirs
+        # don't track excluded directory trees
         local exclude
         for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            [ "$*" = "$exclude" ] && return
+            case "$*" in "$exclude*") return;; esac
         done
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        while read line; do
-            # only count directories
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v path="$*" -v now="$(date +%s)" -F"|" '
+        awk < <(_z_dirs 2>/dev/null) -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -68,35 +77,34 @@ _z() {
                 count += $2
             }
             END {
-                if( count > 6000 ) {
+                if( count > 9000 ) {
                     # aging
                     for( x in rank ) print x "|" 0.99*rank[x] "|" time[x]
                 } else for( x in rank ) print x "|" rank[x] "|" time[x]
             }
         ' 2>/dev/null >| "$tempfile"
-        # do our best to avoid clobbering the datafile in a race condition
+        # do our best to avoid clobbering the datafile in a race condition.
         if [ $? -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
+            [ "$_Z_OWNER" ] && chown $_Z_OWNER:$(id -ng $_Z_OWNER) "$tempfile"
             env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
         fi
 
     # tab completion
-    elif [ "$1" = "--complete" ]; then
+    elif [ "$1" = "--complete" -a -s "$datafile" ]; then
         while read line; do
             [ -d "${line%%\|*}" ] && echo $line
         done < "$datafile" | awk -v q="$2" -F"|" '
             BEGIN {
                 if( q == tolower(q) ) imatch = 1
-                split(substr(q, 3), fnd, " ")
+                q = substr(q, 3)
+                gsub(" ", ".*", q)
             }
             {
                 if( imatch ) {
-                    for( x in fnd ) tolower($1) !~ tolower(fnd[x]) && $1 = ""
-                } else {
-                    for( x in fnd ) $1 !~ fnd[x] && $1 = ""
-                }
-                if( $1 ) print $1
+                    if( tolower($1) ~ tolower(q) ) print $1
+                } else if( $1 ~ q ) print $1
             }
         ' 2>/dev/null
 
@@ -106,29 +114,28 @@ _z() {
             --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
             -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) local fnd="^$PWD $fnd";;
-                    h) echo "${_Z_CMD:-z} [-chlrtx] args" >&2; return;;
-                    x) sed -i "\:^${PWD}|.*:d" "$datafile";;
+                    e) local echo=echo;;
+                    h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
                     l) local list=1;;
                     r) local typ="rank";;
                     t) local typ="recent";;
+                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
                 esac; opt=${opt:1}; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
-        esac; local last=$1; shift; done
+        esac; local last=$1; [ "$#" -gt 0 ] && shift; done
         [ "$fnd" -a "$fnd" != "^$PWD " ] || local list=1
 
         # if we hit enter on a completion just go there
         case "$last" in
             # completions will always start with /
-            /*) [ -z "$list" -a -d "$last" ] && cd "$last" && return;;
+            /*) [ -z "$list" -a -d "$last" ] && builtin cd "$last" && return;;
         esac
 
         # no file yet
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$(while read line; do
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time
                 dx = t - time
@@ -163,22 +170,23 @@ _z() {
                 # use a copy to escape special characters, as we want to return
                 # the original. yeah, this escaping is awful.
                 clean_short = short
-                gsub(/[\(\)\[\]\|]/, "\\\\&", clean_short)
+                gsub(/\[\(\)\[\]\|\]/, "\\\\&", clean_short)
                 for( x in matches ) if( matches[x] && x !~ clean_short ) return
                 return short
             }
-            BEGIN { split(q, words, " "); hi_rank = ihi_rank = -9999999999 }
+            BEGIN {
+                gsub(" ", ".*", q)
+                hi_rank = ihi_rank = -9999999999
+            }
             {
                 if( typ == "rank" ) {
                     rank = $2
                 } else if( typ == "recent" ) {
                     rank = $3 - t
                 } else rank = frecent($2, $3)
-                matches[$1] = imatches[$1] = rank
-                for( x in words ) {
-                    if( $1 !~ words[x] ) delete matches[$1]
-                    if( tolower($1) !~ tolower(words[x]) ) delete imatches[$1]
-                }
+                if( $1 ~ q ) {
+                    matches[$1] = rank
+                } else if( tolower($1) ~ tolower(q) ) imatches[$1] = rank
                 if( matches[$1] && matches[$1] > hi_rank ) {
                     best_match = $1
                     hi_rank = matches[$1]
@@ -196,8 +204,10 @@ _z() {
                 }
             }
         ')"
-        [ $? -gt 0 ] && return
-        [ "$cd" ] && cd "$cd"
+
+        [ $? -eq 0 ] && [ "$cd" ] && {
+          if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
+        }
     fi
 }
 
@@ -205,21 +215,21 @@ alias ${_Z_CMD:-z}='_z 2>&1'
 
 [ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
 
-if compctl >/dev/null 2>&1; then
+if type compctl >/dev/null 2>&1; then
     # zsh
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list, avoid clobbering any other precmds.
         if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
             _z_precmd() {
-                _z --add "${PWD:a}"
+                (_z --add "${PWD:a}" &)
             }
         else
             _z_precmd() {
-                _z --add "${PWD:A}"
+                (_z --add "${PWD:A}" &)
             }
         fi
         [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
-            precmd_functions+=(_z_precmd)
+            precmd_functions[$(($#precmd_functions+1))]=_z_precmd
         }
     }
     _z_zsh_tab_completion() {
@@ -229,14 +239,14 @@ if compctl >/dev/null 2>&1; then
         reply=(${(f)"$(_z --complete "$compl")"})
     }
     compctl -U -K _z_zsh_tab_completion _z
-elif complete >/dev/null 2>&1; then
+elif type complete >/dev/null 2>&1; then
     # bash
     # tab completion
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
-            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''_z --add "$(pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null;'
+            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''(_z --add "$(command pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null &);'
         }
     }
 fi

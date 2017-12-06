@@ -13,12 +13,17 @@ DESCRIPTION
 Tracks your most used directories, based on 'frecency'.
 .P
 After a short learning phase, \fBz\fR will take you to the most 'frecent'
-directory that matches ALL of the regexes given on the command line.
+directory that matches ALL of the regexes given on the command line, in order.
+
+For example, \fBz foo bar\fR would match \fB/foo/bar\fR but not \fB/bar/foo\fR.
 .SH
 OPTIONS
 .TP
 \fB\-c\fR
 restrict matches to subdirectories of the current directory
+.TP
+\fB\-e\fR
+echo the best match, don't cd
 .TP
 \fB\-h\fR
 show a brief help message
@@ -40,7 +45,7 @@ remove the current directory from the datafile
 cd to most frecent dir matching foo
 .TP 14
 \fBz foo bar\fR
-cd to most frecent dir matching foo and bar
+cd to most frecent dir matching foo, then bar
 .TP 14
 \fBz -r foo\fR
 cd to highest ranked dir matching foo
@@ -79,20 +84,24 @@ Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
 Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
 .RE
 .RS
-Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directories to exclude.
+Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directory trees to exclude.
+.RE
+.RS
+Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
 .RE
 .RS
 (These settings should go in .bashrc/.zshrc before the line added above.)
 .RE
 .RS
-Install the provided man page \fBz.1\fR somewhere like \fB/usr/local/man/man1\fR.
+Install the provided man page \fBz.1\fR somewhere in your \f$MANPATH, like
+\fB/usr/local/man/man1\fR.
 .RE
 .SS
 Aging:
 The rank of directories maintained by \fBz\fR undergoes aging based on a simple
 formula. The rank of each entry is incremented every time it is accessed. When
-the sum of ranks is greater than 6000, all ranks are multiplied by 0.99. Entries
-with a rank lower than 1 are forgotten.
+the sum of ranks is over 9000, all ranks are multiplied by 0.99. Entries with a
+rank lower than 1 are forgotten.
 .SS
 Frecency:
 Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted rank
@@ -142,8 +151,11 @@ The environment variable \fB$_Z_NO_PROMPT_COMMAND\fR can be set if you want to
 handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
 .P
 The environment variable \fB$_Z_EXCLUDE_DIRS\fR can be set to an array of
-directories to exclude from tracking. \fB$HOME\fR is always excluded.
+directory trees to exclude from tracking. \fB$HOME\fR is always excluded.
 Directories must be full paths without trailing slashes.
+.P
+The environment variable \fB$_Z_OWNER\fR can be set to your username, to
+allow usage of \fBz\fR when your sudo environment keeps \fB$HOME\fR set.
 .SH
 FILES
 Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the
