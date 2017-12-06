@@ -12,13 +12,15 @@ AVAILABILITY
        bash, zsh
 
 DESCRIPTION
-       Tracks your most used directories, based on 'frecency'.
+       Tracks your most used directories, based on 'frequency'.
 
-       After  a  short  learning  phase, z will take you to the most 'frecent'
+
+       After  a  short  learning  phase, z will take you to the most 'frequent'
        directory that matches ALL of the regexes given on the command line, in
        order.
 
        For example, z foo bar would match /foo/bar but not /bar/foo.
+
 
 OPTIONS
        -c     restrict matches to subdirectories of the current directory
@@ -36,10 +38,10 @@ OPTIONS
        -x     remove the current directory from the datafile
 
 EXAMPLES
-       z foo         cd to most frecent dir matching foo
+       z foo         cd to most frequent dir matching foo
 
-       z foo bar     cd to most frecent dir matching foo, then bar
-
+       z foo bar     cd to most frequent dir matching foo and bar
+       
        z -r foo      cd to highest ranked dir matching foo
 
        z -t foo      cd to most recently accessed dir matching foo
