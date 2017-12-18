@@ -149,7 +149,9 @@ _z() {
                 if( list ) {
                     cmd = "sort -n >&2"
                     for( x in matches ) {
-                        if( matches[x] ) printf "%-10s %s\n", matches[x], x | cmd
+                        if( matches[x] ) {
+                            printf "%-10s %s\n", matches[x], x | cmd
+                        }
                     }
                     if( common ) {
                         printf "%-10s %s\n", "common:", common > "/dev/stderr"
@@ -167,7 +169,9 @@ _z() {
                     }
                 }
                 if( short == "/" ) return
-                for( x in matches ) if( matches[x] && index(x, short) != 1 ) return
+                for( x in matches ) if( matches[x] && index(x, short) != 1 ) {
+                    return
+                }
                 return short
             }
             BEGIN {
