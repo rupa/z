@@ -144,19 +144,19 @@ _z() {
                 if( dx < 604800 ) return rank / 2
                 return rank / 4
             }
-            function output(files, out, common) {
+            function output(matches, best_match, common) {
                 # list or return the desired directory
                 if( list ) {
                     cmd = "sort -n >&2"
-                    for( x in files ) {
-                        if( files[x] ) printf "%-10s %s\n", files[x], x | cmd
+                    for( x in matches ) {
+                        if( matches[x] ) printf "%-10s %s\n", matches[x], x | cmd
                     }
                     if( common ) {
                         printf "%-10s %s\n", "common:", common > "/dev/stderr"
                     }
                 } else {
-                    if( common ) out = common
-                    print out
+                    if( common ) best_match = common
+                    print best_match
                 }
             }
             function common(matches) {
@@ -167,11 +167,7 @@ _z() {
                     }
                 }
                 if( short == "/" ) return
-                # use a copy to escape special characters, as we want to return
-                # the original. yeah, this escaping is awful.
-                clean_short = short
-                gsub(/\[\(\)\[\]\|\]/, "\\\\&", clean_short)
-                for( x in matches ) if( matches[x] && x !~ clean_short ) return
+                for( x in matches ) if( matches[x] && index(x, short) != 1 ) return
                 return short
             }
             BEGIN {
