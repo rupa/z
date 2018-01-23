@@ -38,9 +38,10 @@ _z() {
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     _z_dirs () {
+        local line
         while read line; do
             # only count directories
-            [ -d "${line%%\|*}" ] && echo $line
+            [ -d "${line%%\|*}" ] && echo "$line"
         done < "$datafile"
         return 0
     }
@@ -60,7 +61,7 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        awk < <(_z_dirs 2>/dev/null) -v path="$*" -v now="$(date +%s)" -F"|" '
+        _z_dirs | awk -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -93,17 +94,15 @@ _z() {
 
     # tab completion
     elif [ "$1" = "--complete" -a -s "$datafile" ]; then
-        while read line; do
-            [ -d "${line%%\|*}" ] && echo $line
-        done < "$datafile" | awk -v q="$2" -F"|" '
+        _z_dirs | awk -v q="$2" -F"|" '
             BEGIN {
-                if( q == tolower(q) ) imatch = 1
                 q = substr(q, 3)
-                gsub(" ", ".*", q)
+                if( q == tolower(q) ) imatch = 1
+                gsub(/ /, ".*", q)
             }
             {
                 if( imatch ) {
-                    if( tolower($1) ~ tolower(q) ) print $1
+                    if( tolower($1) ~ q ) print $1
                 } else if( $1 ~ q ) print $1
             }
         ' 2>/dev/null
