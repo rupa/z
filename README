@@ -6,7 +6,7 @@ NAME
        z - jump around
 
 SYNOPSIS
-       z [-chlrtx] [regex1 regex2 ... regexn]
+       z [-cehilrstx] [regex1 regex2 ... regexn]
 
 AVAILABILITY
        bash, zsh
@@ -16,7 +16,8 @@ DESCRIPTION
 
        After  a  short  learning  phase, z will take you to the most 'frecent'
        directory that matches ALL of the regexes given on the command line, in
-       order.
+       order. By default, smart case sensitivity is used, namely case insensi-
+       tive match when regexes are lower case, case sensitive match otherwise.
 
        For example, z foo bar would match /foo/bar but not /bar/foo.
 
@@ -27,9 +28,13 @@ OPTIONS
 
        -h     show a brief help message
 
+       -i     case insensitive match
+
        -l     list only
 
        -r     match by rank only
+
+       -s     case sensitive match
 
        -t     match by recent access only
 

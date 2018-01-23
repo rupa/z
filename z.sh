@@ -110,18 +110,20 @@ _z() {
     else
         # list/go
         while [ "$1" ]; do case "$1" in
-            --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1";done;;
-            -*) local opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
+            --) while [ "$1" ]; do shift; local fnd="$fnd${fnd:+ }$1"; done;;
+            -*) local opt="${1:1}"; while [ "$opt" ]; do case "${opt:0:1}" in
                     c) local fnd="^$PWD $fnd";;
                     e) local echo=echo;;
-                    h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
+                    h) echo "${_Z_CMD:-z} [-cehilrstx] [regex1 regex2 ... regexn]" >&2; return;;
+                    i) local cas='i';;
                     l) local list=1;;
-                    r) local typ="rank";;
-                    t) local typ="recent";;
+                    r) local typ='r';;
+                    s) local cas='s';;
+                    t) local typ='t';;
                     x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
-                esac; opt=${opt:1}; done;;
+                esac; opt="${opt:1}"; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
-        esac; local last=$1; [ "$#" -gt 0 ] && shift; done
+        esac; local last="$1"; [ "$#" -gt 0 ] && shift; done
         [ "$fnd" -a "$fnd" != "^$PWD " ] || local list=1
 
         # if we hit enter on a completion just go there
@@ -134,10 +136,10 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) awk -v now="$(date +%s)" -v cas="$cas" -v list="$list" -v typ="$typ" -v q="$fnd" -F'|' '
             function frecent(rank, time) {
                 # relate frequency and time
-                dx = t - time
+                dx = now - time
                 if( dx < 3600 ) return rank * 4
                 if( dx < 86400 ) return rank * 2
                 if( dx < 604800 ) return rank / 2
@@ -174,33 +176,32 @@ _z() {
                 return short
             }
             BEGIN {
-                gsub(" ", ".*", q)
-                hi_rank = ihi_rank = -9999999999
+                if( cas == "i" ) {
+                    q = tolower(q)
+                    imatch = 1
+                } else if( cas != "s" && q == tolower(q) ) imatch = 1
+                gsub(/ /, ".*", q)
+                hi_rank = -9999999999
             }
             {
-                if( typ == "rank" ) {
+                if( typ == "r" ) {
                     rank = $2
-                } else if( typ == "recent" ) {
-                    rank = $3 - t
+                } else if( typ == "t" ) {
+                    rank = $3 - now
                 } else rank = frecent($2, $3)
-                if( $1 ~ q ) {
+                if( imatch ) {
+                    x = tolower($1)
+                } else x = $1
+                if( x ~ q ) {
                     matches[$1] = rank
-                } else if( tolower($1) ~ tolower(q) ) imatches[$1] = rank
-                if( matches[$1] && matches[$1] > hi_rank ) {
-                    best_match = $1
-                    hi_rank = matches[$1]
-                } else if( imatches[$1] && imatches[$1] > ihi_rank ) {
-                    ibest_match = $1
-                    ihi_rank = imatches[$1]
+                    if( rank > hi_rank ) {
+                        best_match = $1
+                        hi_rank = rank
+                    }
                 }
             }
             END {
-                # prefer case sensitive
-                if( best_match ) {
-                    output(matches, best_match, common(matches))
-                } else if( ibest_match ) {
-                    output(imatches, ibest_match, common(imatches))
-                }
+                output(matches, best_match, common(matches))
             }
         ')"
 

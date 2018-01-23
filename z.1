@@ -4,7 +4,7 @@ NAME
 z \- jump around
 .SH
 SYNOPSIS
-z [\-chlrtx] [regex1 regex2 ... regexn]
+z [\-cehilrstx] [regex1 regex2 ... regexn]
 .SH
 AVAILABILITY
 bash, zsh
@@ -14,6 +14,8 @@ Tracks your most used directories, based on 'frecency'.
 .P
 After a short learning phase, \fBz\fR will take you to the most 'frecent'
 directory that matches ALL of the regexes given on the command line, in order.
+By default, smart case sensitivity is used, namely case insensitive match when
+regexes are lower case, case sensitive match otherwise.
 
 For example, \fBz foo bar\fR would match \fB/foo/bar\fR but not \fB/bar/foo\fR.
 .SH
@@ -28,11 +30,17 @@ echo the best match, don't cd
 \fB\-h\fR
 show a brief help message
 .TP
+\fB\-i\fR
+case insensitive match
+.TP
 \fB\-l\fR
 list only
 .TP
 \fB\-r\fR
 match by rank only
+.TP
+\fB\-s\fR
+case sensitive match
 .TP
 \fB\-t\fR
 match by recent access only
