@@ -147,12 +147,12 @@ _z() {
             function output(files, out, common) {
                 # list or return the desired directory
                 if( list ) {
+                    if( common ) {
+                        printf "%-10s %s\n", "common:", common > "/dev/stderr"
+                    }
                     cmd = "sort -n >&2"
                     for( x in files ) {
                         if( files[x] ) printf "%-10s %s\n", files[x], x | cmd
-                    }
-                    if( common ) {
-                        printf "%-10s %s\n", "common:", common > "/dev/stderr"
                     }
                 } else {
                     if( common ) out = common
