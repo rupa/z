@@ -23,6 +23,7 @@
 #     * z -l foo  # list matches instead of cd
 #     * z -e foo  # echo the best match, don't cd
 #     * z -c foo  # restrict matches to subdirs of $PWD
+#     * z -x foo  # removes dir `foo` from z database
 
 [ -d "${_Z_DATA:-$HOME/.z}" ] && {
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
@@ -119,7 +120,9 @@ _z() {
                     l) local list=1;;
                     r) local typ="rank";;
                     t) local typ="recent";;
-                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
+                    x) local xdir="${PWD}"
+                       if [ $# -gt 1 ]; then xdir="$2"; shift; fi
+                       sed -i -e "\:^${xdir}|.*:d" "$datafile";;
                 esac; opt=${opt:1}; done;;
              *) local fnd="$fnd${fnd:+ }$1";;
         esac; local last=$1; [ "$#" -gt 0 ] && shift; done
