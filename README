@@ -60,7 +60,7 @@ NOTES
               Set $_Z_CMD to change the command name (default z).
               Set $_Z_DATA to change the datafile (default $HOME/.z).
               Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
-              Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
+              Set $_Z_NO_PROMPT_COMMAND to handle  PROMPT_COMMAND/chpwd  your-
               self.
               Set $_Z_EXCLUDE_DIRS to an array of directory trees to  exclude.
               Set $_Z_OWNER to allow usage when in 'sudo -s' mode.
@@ -116,11 +116,11 @@ ENVIRONMENT
        resolved when added to the datafile.
 
        In bash, z appends a command to the PROMPT_COMMAND environment variable
-       to maintain its database. In zsh, z appends a function _z_precmd to the
-       precmd_functions array.
+       to maintain its database.  In zsh, z sets function _z_chpwd as a  chpwd
+       hook.
 
        The environment variable $_Z_NO_PROMPT_COMMAND can be set if  you  want
-       to handle PROMPT_COMMAND or precmd yourself.
+       to handle PROMPT_COMMAND or chpwd yourself.
 
        The  environment  variable  $_Z_EXCLUDE_DIRS  can be set to an array of
        directory trees to exclude from tracking.  $HOME  is  always  excluded.
