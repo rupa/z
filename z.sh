@@ -10,6 +10,7 @@
 #     * optionally:
 #         set $_Z_CMD in .bashrc/.zshrc to change the command (default z).
 #         set $_Z_DATA in .bashrc/.zshrc to change the datafile (default ~/.z).
+#         set $_Z_MAX_SCORE lower to age entries out faster (default 9000).
 #         set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
 #         set $_Z_NO_PROMPT_COMMAND if you're handling PROMPT_COMMAND yourself.
 #         set $_Z_EXCLUDE_DIRS to an array of directories to exclude.
@@ -62,7 +63,8 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        _z_dirs | awk -v path="$*" -v now="$(date +%s)" -F"|" '
+        local score=${_Z_MAX_SCORE:-9000}
+        _z_dirs | awk -v path="$*" -v now="$(date +%s)" -v score=$score -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -79,7 +81,7 @@ _z() {
                 count += $2
             }
             END {
-                if( count > 9000 ) {
+                if( count > score ) {
                     # aging
                     for( x in rank ) print x "|" 0.99*rank[x] "|" time[x]
                 } else for( x in rank ) print x "|" rank[x] "|" time[x]

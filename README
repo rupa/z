@@ -59,6 +59,8 @@ NOTES
        Optionally:
               Set $_Z_CMD to change the command name (default z).
               Set $_Z_DATA to change the datafile (default $HOME/.z).
+              Set  $_Z_MAX_SCORE  lower  to  age  entries  out faster (default
+              9000).
               Set $_Z_NO_RESOLVE_SYMLINKS to prevent symlink resolution.
               Set $_Z_NO_PROMPT_COMMAND to handle PROMPT_COMMAND/precmd  your-
               self.
