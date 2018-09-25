@@ -158,7 +158,7 @@ _z() {
                         printf "%-10s %s\n", "common:", common > "/dev/stderr"
                     }
                 } else {
-                    if( common ) best_match = common
+                    if( common && !typ ) best_match = common
                     print best_match
                 }
             }
