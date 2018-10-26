@@ -5,11 +5,13 @@ $(eval MAN_PATH=$(shell command -v manpath >/dev/null 2>&1 && manpath | \
 
 # first we copy the man file to a directory in the manpath
 # then we copy the z.sh file to the home directory
-# then we add '. ~/z.sh' to the .bashrc file to source z.sh.
+# then we add '. ~/z.sh' to the .bashrc file to source z.sh
+# we then reload the bashrc file
 install:
 	@cp z.1 $(MAN_PATH)/man1/z.1
 	@cp z.sh $(HOME)/z.sh
 	@[ -f $(HOME)/.bashrc ] && echo ". ${HOME}/z.sh" >> $(HOME)/.bashrc
+	@. $(HOME)/.bashrc
 	@echo "Installation completed! cd around for a while to build up the db. \
 		PROFIT!!"
 
