@@ -62,7 +62,7 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        _z_dirs | awk -v path="$*" -v now="$(date +%s)" -F"|" '
+        _z_dirs | \awk -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -95,7 +95,7 @@ _z() {
 
     # tab completion
     elif [ "$1" = "--complete" -a -s "$datafile" ]; then
-        _z_dirs | awk -v q="$2" -F"|" '
+        _z_dirs | \awk -v q="$2" -F"|" '
             BEGIN {
                 q = substr(q, 3)
                 if( q == tolower(q) ) imatch = 1
@@ -120,7 +120,7 @@ _z() {
                     l) list=1;;
                     r) typ="rank";;
                     t) typ="recent";;
-                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
+                    x) \sed -i -e "\:^${PWD}|.*:d" "$datafile";;
                 esac; opt=${opt:1}; done;;
              *) fnd="$fnd${fnd:+ }$1";;
         esac; last=$1; [ "$#" -gt 0 ] && shift; done
@@ -136,7 +136,7 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) \awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time
                 dx = t - time
