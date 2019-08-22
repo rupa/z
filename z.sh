@@ -247,12 +247,7 @@ elif type complete >/dev/null 2>&1; then
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
-            # Check if there are existing PROMPT_COMMANDs that are not terminated with a semicolon
-            if [[ "$PROMPT_COMMAND" =~ ^[^\ ]+ ]] && ! [[ "$PROMPT_COMMAND" =~ ^.*\;\ *$ ]]
-                then # terminate it
-                PROMPT_COMMAND="$PROMPT_COMMAND; "
-            fi
-            PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''(_z --add "$(command pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null &);'
+            PROMPT_COMMAND="$'\n''(_z --add "$(command pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null &);'$PROMPT_COMMAND"
         }
     }
 fi
