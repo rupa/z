@@ -61,7 +61,14 @@ _z() {
         done
 
         # maintain the data file
-        local tempfile="$datafile.$RANDOM"
+        local tempfile="$(mktemp "${datafile}.XXXXXXXX")"
+        if [ "$_Z_USE_ZSYSTEM_FLOCK" -eq 1 ]; then
+            # make sure datafile exists (for locking)
+            [ -f "$datafile" ] || touch "$datafile"
+            local lockfd
+            # grab exclusive lock (released when function exits)
+            zsystem flock -f lockfd "$datafile" || return
+        fi
         _z_dirs | awk -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
@@ -85,12 +92,20 @@ _z() {
                 } else for( x in rank ) print x "|" rank[x] "|" time[x]
             }
         ' 2>/dev/null >| "$tempfile"
-        # do our best to avoid clobbering the datafile in a race condition.
-        if [ $? -ne 0 -a -f "$datafile" ]; then
+        local ret=$?
+        if [ "$_Z_USE_ZSYSTEM_FLOCK" -eq 1 ]; then
+            # replace contents of datafile with tempfile
+            env cat "$tempfile" >| "$datafile"
+            [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$datafile"
             env rm -f "$tempfile"
         else
-            [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
-            env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
+            # do our best to avoid clobbering the datafile in a race condition.
+            if [ $ret -ne 0 -a -f "$datafile" ]; then
+                env rm -f "$tempfile"
+            else
+                [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
+                env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
+            fi
         fi
 
     # tab completion
@@ -215,6 +230,14 @@ _z() {
 alias ${_Z_CMD:-z}='_z 2>&1'
 
 [ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
+
+if type zmodload >/dev/null 2>&1; then
+    # load zsh/system for the zsystem flock builtin
+    zmodload zsh/system &>/dev/null
+    if zsystem supports flock &>/dev/null; then
+        _Z_USE_ZSYSTEM_FLOCK=1
+    fi
+fi
 
 if type compctl >/dev/null 2>&1; then
     # zsh
