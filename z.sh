@@ -28,6 +28,14 @@
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
 
+_z_pick_awk_flavor() {
+    if [ -z "$_Z_AWK" ]; then
+        local awk; for awk in mawk gawk original-awk nawk awk; do
+            command -v $awk > /dev/null 2>&1 && _Z_AWK=$awk && break
+        done
+    fi
+}
+
 _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
@@ -62,7 +70,7 @@ _z() {
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
-        _z_dirs | awk -v path="$*" -v now="$(date +%s)" -F"|" '
+        _z_dirs | $_Z_AWK -v path="$*" -v now="$(date +%s)" -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -95,7 +103,7 @@ _z() {
 
     # tab completion
     elif [ "$1" = "--complete" -a -s "$datafile" ]; then
-        _z_dirs | awk -v q="$2" -F"|" '
+        _z_dirs | $_Z_AWK -v q="$2" -F"|" '
             BEGIN {
                 q = substr(q, 3)
                 if( q == tolower(q) ) imatch = 1
@@ -120,7 +128,12 @@ _z() {
                     l) list=1;;
                     r) typ="rank";;
                     t) typ="recent";;
-                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
+                    x)
+                      local tempfile="$datafile.$RANDOM"
+                      sed -e "\:^${PWD}|.*:d" "$datafile" > "$tempfile"
+                      env mv -f "$tempfile" "$datafile" 2> /dev/null \
+                          || env rm -f "$tempfile"
+                      ;;
                 esac; opt=${opt:1}; done;;
              *) fnd="$fnd${fnd:+ }$1";;
         esac; last=$1; [ "$#" -gt 0 ] && shift; done
@@ -136,7 +149,7 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) $_Z_AWK -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
                 # relate frequency and time
                 dx = t - time
@@ -211,6 +224,8 @@ _z() {
         }
     fi
 }
+
+_z_pick_awk_flavor
 
 alias ${_Z_CMD:-z}='_z 2>&1'
 
