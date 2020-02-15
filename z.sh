@@ -142,12 +142,12 @@ _z() {
             function frecent(rank, time) {
               # relate frequency and time
               dx = t - time
-              return rank * (3.75/((0.0001 * dx + 1) + 0.25))
+              return int(10000 * rank * (3.75/((0.0001 * dx + 1) + 0.25)))
             }
             function output(matches, best_match, common) {
                 # list or return the desired directory
                 if( list ) {
-                    cmd = "sort -g >&2"
+                    cmd = "sort -n >&2"
                     for( x in matches ) {
                         if( matches[x] ) {
                             printf "%-10s %s\n", matches[x], x | cmd
