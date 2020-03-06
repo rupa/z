@@ -205,9 +205,11 @@ _z() {
             }
         ')"
 
-        [ $? -eq 0 ] && [ "$cd" ] && {
-          if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
-        }
+        [ "$?" -eq 0 ] && if [ "$cd" ]; then
+            if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
+        else
+            [ -n "$list" ]
+        fi
     fi
 }
 
