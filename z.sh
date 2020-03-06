@@ -199,16 +199,21 @@ _z() {
                 # prefer case sensitive
                 if( best_match ) {
                     output(matches, best_match, common(matches))
+                    exit(0)
                 } else if( ibest_match ) {
                     output(imatches, ibest_match, common(imatches))
+                    exit(0)
                 }
+                exit(1)
             }
         ')"
 
-        [ "$?" -eq 0 ] && if [ "$cd" ]; then
+        if [ "$?" -eq 0 ]; then
+          if [ "$cd" ]; then
             if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
+          fi
         else
-            [ -n "$list" ]
+          return $?
         fi
     fi
 }
