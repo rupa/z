@@ -199,10 +199,10 @@ _z() {
                 # prefer case sensitive
                 if( best_match ) {
                     output(matches, best_match, common(matches))
-                    exit(0)
+                    exit
                 } else if( ibest_match ) {
                     output(imatches, ibest_match, common(imatches))
-                    exit(0)
+                    exit
                 }
                 exit(1)
             }
