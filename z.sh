@@ -229,10 +229,12 @@ if type compctl >/dev/null 2>&1; then
         if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
             _z_precmd() {
                 (_z --add "${PWD:a}" &)
+                : $RANDOM
             }
         else
             _z_precmd() {
                 (_z --add "${PWD:A}" &)
+                : $RANDOM
             }
         fi
         [[ -n "${precmd_functions[(r)_z_precmd]}" ]] || {
