@@ -33,6 +33,8 @@ _z() {
 
     local datafile="${_Z_DATA:-$HOME/.z}"
 
+    unset POSIXLY_CORRECT
+    
     # if symlink, dereference
     [ -h "$datafile" ] && datafile=$(readlink "$datafile")
 
