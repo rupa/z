@@ -159,7 +159,7 @@ _z() {
                         }
                     }
                 } else {
-                    if( common ) best_match = common
+                    if( common && !typ ) best_match = common
                     print best_match
                 }
             }
