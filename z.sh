@@ -39,7 +39,7 @@ _z() {
     [ -h "$datafile" ] && datafile=$(readlink "$datafile")
 
     # bail if we don't own ~/.z and $_Z_OWNER not set
-    [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
+    [ -z "${_Z_OWNER+set}" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     _z_dirs () {
         local line
@@ -93,7 +93,7 @@ _z() {
         if [ $? -ne 0 -a -f "$datafile" ]; then
             env rm -f "$tempfile"
         else
-            [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
+            [ "${_Z_OWNER+set}" ] && chown "$_Z_OWNER:$(id -ng "$_Z_OWNER")" "$tempfile"
             env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
         fi
 
@@ -115,7 +115,7 @@ _z() {
     else
         # list/go
         local echo fnd last list opt typ
-        while [ "$1" ]; do case "$1" in
+        while [ "${1+set}" ]; do case "$1" in
             --) while [ "$1" ]; do shift; fnd="$fnd${fnd:+ }$1";done;;
             -*) opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) fnd="^$PWD $fnd";;
@@ -127,7 +127,7 @@ _z() {
                     x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
                 esac; opt=${opt:1}; done;;
              *) fnd="$fnd${fnd:+ }$1";;
-        esac; last=$1; [ "$#" -gt 0 ] && shift; done
+        esac; last="$1"; [ "$#" -gt 0 ] && shift; done
         [ "$fnd" -a "$fnd" != "^$PWD " ] || list=1
 
         # if we hit enter on a completion just go there
@@ -222,13 +222,14 @@ _z() {
 
 alias ${_Z_CMD:-z}='_z 2>&1'
 
-[ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
+[ "${_Z_NO_RESOLVE_SYMLINKS+set}" ] || _Z_RESOLVE_SYMLINKS="-P"
 
 if type compctl >/dev/null 2>&1; then
     # zsh
-    [ "$_Z_NO_PROMPT_COMMAND" ] || {
+    typeset -a _Z_EXCLUDE_DIRS
+    [ "${_Z_NO_PROMPT_COMMAND+set}" ] || {
         # populate directory list, avoid clobbering any other precmds.
-        if [ "$_Z_NO_RESOLVE_SYMLINKS" ]; then
+        if [ "${_Z_NO_RESOLVE_SYMLINKS+set}" ]; then
             _z_precmd() {
                 (_z --add "${PWD:a}" &)
                 : $RANDOM
@@ -252,9 +253,10 @@ if type compctl >/dev/null 2>&1; then
     compctl -U -K _z_zsh_tab_completion _z
 elif type complete >/dev/null 2>&1; then
     # bash
+    typeset -a _Z_EXCLUDE_DIRS
     # tab completion
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
-    [ "$_Z_NO_PROMPT_COMMAND" ] || {
+    [ "${_Z_NO_PROMPT_COMMAND+set}" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
             PROMPT_COMMAND="$PROMPT_COMMAND"$'\n''(_z --add "$(command pwd '$_Z_RESOLVE_SYMLINKS' 2>/dev/null)" 2>/dev/null &);'
