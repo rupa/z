@@ -42,6 +42,8 @@ _z() {
     [ -z "$_Z_OWNER" -a -f "$datafile" -a ! -O "$datafile" ] && return
 
     _z_dirs () {
+        [ -f "$datafile" ] || return
+
         local line
         while read line; do
             # only count directories
