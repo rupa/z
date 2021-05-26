@@ -56,8 +56,8 @@ _z() {
     if [ "$1" = "--add" ]; then
         shift
 
-        # $HOME isn't worth matching
-        [ "$*" = "$HOME" ] && return
+        # $HOME and / aren't worth matching
+        [ "$*" = "$HOME" -o "$*" = '/' ] && return
 
         # don't track excluded directory trees
         local exclude
