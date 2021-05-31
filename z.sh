@@ -60,10 +60,12 @@ _z() {
         [ "$*" = "$HOME" -o "$*" = '/' ] && return
 
         # don't track excluded directory trees
-        local exclude
-        for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
-            case "$*" in "$exclude"*) return;; esac
-        done
+        if [ ${#_Z_EXCLUDE_DIRS[@]} -gt 0 ]; then
+            local exclude
+            for exclude in "${_Z_EXCLUDE_DIRS[@]}"; do
+                case "$*" in "$exclude"*) return;; esac
+            done
+        fi
 
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
