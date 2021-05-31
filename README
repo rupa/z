@@ -52,6 +52,9 @@ NOTES
 
               . /path/to/z.sh
 
+       Then execute `source $HOME/.bashrc` or `source $HOME/.zshrc` to
+       make the configuration take effect.
+
        cd around for a while to build up the db.
 
        PROFIT!!
