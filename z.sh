@@ -156,7 +156,7 @@ _z() {
                     if( common ) {
                         printf "%-10s %s\n", "common:", common > "/dev/stderr"
                     }
-                    cmd = "sort -n >&2"
+                    cmd = "sort -nr >&2"
                     for( x in matches ) {
                         if( matches[x] ) {
                             printf "%-10s %s\n", matches[x], x | cmd
