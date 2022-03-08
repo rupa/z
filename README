@@ -3,10 +3,10 @@ Z(1)                             User Commands                            Z(1)
 
 
 NAME
-       z - jump around
+       z|zz - jump around
 
 SYNOPSIS
-       z [-chlrtx] [regex1 regex2 ... regexn]
+       {z|zz} [-chlprtx] [regex1 regex2 ... regexn]
 
 AVAILABILITY
        bash, zsh
@@ -20,6 +20,9 @@ DESCRIPTION
 
        For example, z foo bar would match /foo/bar but not /bar/foo.
 
+       zz  command  is  an alias to z -p. It behaves exactly like z, only uses
+       pushd instead of cd.
+
 OPTIONS
        -c     restrict matches to subdirectories of the current directory
 
@@ -28,6 +31,9 @@ OPTIONS
        -h     show a brief help message
 
        -l     list only
+
+       -p     Use pushd instead of cd. zz command has this option set  by  de-
+              fault
 
        -r     match by rank only
 
@@ -46,6 +52,8 @@ EXAMPLES
 
        z -l foo      list all dirs matching foo (by frecency)
 
+       zz foo        pushd to most frecent dir matching foo
+
 NOTES
    Installation:
        Put something like this in your $HOME/.bashrc or $HOME/.zshrc:
@@ -57,7 +65,8 @@ NOTES
        PROFIT!!
 
        Optionally:
-              Set $_Z_CMD to change the command name (default z).
+              Set $_Z_CMD to change the "cd" command name (default z).
+              Set $_ZZ_CMD to change the "pushd" command name (default zz).
               Set $_Z_DATA to change the datafile (default $HOME/.z).
               Set  $_Z_MAX_SCORE  lower  to  age  entries  out faster (default
               9000).
@@ -109,6 +118,9 @@ ENVIRONMENT
 
        The contents of the variable $_Z_CMD is aliased to _z 2>&1. If not set,
        $_Z_CMD defaults to z.
+
+       In similar fashion, the contents of the variable $_ZZ_CMD is aliased to
+       _z -p 2>&1. If not set, $_ZZ_CMD defaults to zz.
 
        The  environment  variable $_Z_DATA can be used to control the datafile
        location. If it is not defined, the location defaults to $HOME/.z.

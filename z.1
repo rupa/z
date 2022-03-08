@@ -1,10 +1,10 @@
 .TH "Z" "1" "January 2013" "z" "User Commands"
 .SH
 NAME
-z \- jump around
+z|zz \- jump around
 .SH
 SYNOPSIS
-z [\-chlrtx] [regex1 regex2 ... regexn]
+{z|zz} [\-chlprtx] [regex1 regex2 ... regexn]
 .SH
 AVAILABILITY
 bash, zsh
@@ -16,6 +16,8 @@ After a short learning phase, \fBz\fR will take you to the most 'frecent'
 directory that matches ALL of the regexes given on the command line, in order.
 
 For example, \fBz foo bar\fR would match \fB/foo/bar\fR but not \fB/bar/foo\fR.
+
+\fBzz\fR command is an alias to \fBz -p\fR. It behaves exactly like z, only uses pushd instead of cd.
 .SH
 OPTIONS
 .TP
@@ -30,6 +32,9 @@ show a brief help message
 .TP
 \fB\-l\fR
 list only
+.TP
+\fB\-p\fR
+Use \fBpushd\fR instead of \fBcd\fR. zz command has this option set by default
 .TP
 \fB\-r\fR
 match by rank only
@@ -55,6 +60,9 @@ cd to most recently accessed dir matching foo
 .TP 14
 \fBz -l foo\fR
 list all dirs matching foo (by frecency)
+.TP 14
+\fBzz foo\fR
+pushd to most frecent dir matching foo
 .SH
 NOTES
 .SS
@@ -72,7 +80,10 @@ PROFIT!!
 .P
 Optionally:
 .RS
-Set \fB$_Z_CMD\fR to change the command name (default \fBz\fR).
+Set \fB$_Z_CMD\fR to change the "cd" command name (default \fBz\fR).
+.RE
+.RS
+Set \fB$_ZZ_CMD\fR to change the "pushd" command name (default \fBzz\fR).
 .RE
 .RS
 Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
@@ -138,6 +149,9 @@ A function \fB_z()\fR is defined.
 .P
 The contents of the variable \fB$_Z_CMD\fR is aliased to \fB_z 2>&1\fR. If not
 set, \fB$_Z_CMD\fR defaults to \fBz\fR.
+.P
+In similar fashion, the contents of the variable \fB$_ZZ_CMD\fR is aliased to
+\fB_z -p 2>&1\fR. If not set, \fB$_ZZ_CMD\fR defaults to \fBzz\fR.
 .P
 The environment variable \fB$_Z_DATA\fR can be used to control the datafile
 location. If it is not defined, the location defaults to \fB$HOME/.z\fR.
