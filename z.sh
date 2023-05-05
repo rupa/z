@@ -27,6 +27,9 @@
 #     * z -x      # remove the current directory from the datafile
 #     * z -h      # show a brief help message
 
+# Make sure to use the correct env. env is sometimes aliased.
+ENV=/usr/bin/env
+
 [ -d "${_Z_DATA:-$HOME/.z}" ] && {
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
 }
@@ -95,10 +98,10 @@ _z() {
         ' 2>/dev/null >| "$tempfile"
         # do our best to avoid clobbering the datafile in a race condition.
         if [ $? -ne 0 -a -f "$datafile" ]; then
-            env rm -f "$tempfile"
+            $ENV rm -f "$tempfile"
         else
             [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
-            env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
+            $ENV mv -f "$tempfile" "$datafile" || $ENV rm -f "$tempfile"
         fi
 
     # tab completion
