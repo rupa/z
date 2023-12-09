@@ -124,7 +124,19 @@ _z() {
             -*) opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) fnd="^$PWD $fnd";;
                     e) echo=1;;
-                    h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
+                    h) cat <<'EOF'
+Usage: ${_Z_CMD:-z} [-cehlrtx] args
+
+Options:
+    -c     restrict matches to subdirectories of the current directory
+    -e     echo the best match, don't cd
+    -h     show a brief help message
+    -l     list only
+    -r     match by rank only
+    -t     match by recent access only
+    -x     remove the current directory from the datafile
+EOF
+                       return;;
                     l) list=1;;
                     r) typ="rank";;
                     t) typ="recent";;
