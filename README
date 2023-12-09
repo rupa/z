@@ -9,7 +9,8 @@ SYNOPSIS
        z [-chlrtx] [regex1 regex2 ... regexn]
 
 AVAILABILITY
-       bash, zsh
+       bash, zsh  
+       [fish implementation](https://github.com/jethrokuan/z)
 
 DESCRIPTION
        Tracks your most used directories, based on 'frecency'.
