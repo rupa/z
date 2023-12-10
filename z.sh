@@ -26,6 +26,7 @@
 #     * z -c foo  # restrict matches to subdirs of $PWD
 #     * z -x      # remove the current directory from the datafile
 #     * z -h      # show a brief help message
+#     * zz [all of the above] # same as with "z", but use pushd instead of cd
 
 [ -d "${_Z_DATA:-$HOME/.z}" ] && {
     echo "ERROR: z.sh's datafile (${_Z_DATA:-$HOME/.z}) is a directory."
@@ -118,14 +119,16 @@ _z() {
 
     else
         # list/go
-        local echo fnd last list opt typ
+        local echo fnd last list opt typ cd_cmd
+        cd_cmd="cd"
         while [ "$1" ]; do case "$1" in
             --) while [ "$1" ]; do shift; fnd="$fnd${fnd:+ }$1";done;;
             -*) opt=${1:1}; while [ "$opt" ]; do case ${opt:0:1} in
                     c) fnd="^$PWD $fnd";;
                     e) echo=1;;
-                    h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
+                    h) echo "{${_Z_CMD:-z}|${_ZZ_CMD:-zz}} [-cehlprtx] args" >&2; return;;
                     l) list=1;;
+                    p) cd_cmd="pushd";;
                     r) typ="rank";;
                     t) typ="recent";;
                     x) \sed -i -e "\:^${PWD}|.*:d" "$datafile";;
@@ -137,7 +140,7 @@ _z() {
         # if we hit enter on a completion just go there
         case "$last" in
             # completions will always start with /
-            /*) [ -z "$list" -a -d "$last" ] && builtin cd "$last" && return;;
+            /*) [ -z "$list" -a -d "$last" ] && builtin $cd_cmd "$last" && return;;
         esac
 
         # no file yet
@@ -216,7 +219,7 @@ _z() {
 
         if [ "$?" -eq 0 ]; then
           if [ "$cd" ]; then
-            if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
+            if [ "$echo" ]; then echo "$cd"; else builtin $cd_cmd "$cd"; fi
           fi
         else
           return $?
@@ -225,6 +228,7 @@ _z() {
 }
 
 alias ${_Z_CMD:-z}='_z 2>&1'
+alias ${_ZZ_CMD:-zz}='_z -p 2>&1'
 
 [ "$_Z_NO_RESOLVE_SYMLINKS" ] || _Z_RESOLVE_SYMLINKS="-P"
 
@@ -258,6 +262,7 @@ elif type complete >/dev/null 2>&1; then
     # bash
     # tab completion
     complete -o filenames -C '_z --complete "$COMP_LINE"' ${_Z_CMD:-z}
+    complete -o filenames -C '_z --complete "$COMP_LINE"' ${_ZZ_CMD:-zz}
     [ "$_Z_NO_PROMPT_COMMAND" ] || {
         # populate directory list. avoid clobbering other PROMPT_COMMANDs.
         grep "_z --add" <<< "$PROMPT_COMMAND" >/dev/null || {
