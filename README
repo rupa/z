@@ -6,7 +6,7 @@ NAME
        z - jump around
 
 SYNOPSIS
-       z [-chlrtx] [regex1 regex2 ... regexn]
+       z [-chlrtxv] [regex1 regex2 ... regexn]
 
 AVAILABILITY
        bash, zsh
@@ -24,6 +24,8 @@ OPTIONS
        -c     restrict matches to subdirectories of the current directory
 
        -e     echo the best match, don't cd
+
+       -v     cd and echo the new directory
 
        -h     show a brief help message
 

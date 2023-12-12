@@ -21,6 +21,7 @@
 #     * z foo bar # cd to most frecent dir matching foo and bar
 #     * z -r foo  # cd to highest ranked dir matching foo
 #     * z -t foo  # cd to most recently accessed dir matching foo
+#     * z -v foo  # cd to most frecent dir matching foo and echo $PWD
 #     * z -l foo  # list matches instead of cd
 #     * z -e foo  # echo the best match, don't cd
 #     * z -c foo  # restrict matches to subdirs of $PWD
@@ -125,6 +126,7 @@ _z() {
                     c) fnd="^$PWD $fnd";;
                     e) echo=1;;
                     h) echo "${_Z_CMD:-z} [-cehlrtx] args" >&2; return;;
+                    v) verbose=1;;
                     l) list=1;;
                     r) typ="rank";;
                     t) typ="recent";;
@@ -216,7 +218,10 @@ _z() {
 
         if [ "$?" -eq 0 ]; then
           if [ "$cd" ]; then
-            if [ "$echo" ]; then echo "$cd"; else builtin cd "$cd"; fi
+            if [ "$echo" ]; then echo "$cd"
+            else builtin cd "$cd"
+                if [ "$verbose" ]; then echo $PWD; fi
+            fi
           fi
         else
           return $?
