@@ -71,7 +71,7 @@ _z() {
         # maintain the data file
         local tempfile="$datafile.$RANDOM"
         local score=${_Z_MAX_SCORE:-9000}
-        _z_dirs | awk -v path="$*" -v now="$(date +%s)" -v score=$score -F"|" '
+        _z_dirs | \awk -v path="$*" -v now="$(\date +%s)" -v score=$score -F"|" '
             BEGIN {
                 rank[path] = 1
                 time[path] = now
@@ -96,15 +96,15 @@ _z() {
         ' 2>/dev/null >| "$tempfile"
         # do our best to avoid clobbering the datafile in a race condition.
         if [ $? -ne 0 -a -f "$datafile" ]; then
-            env rm -f "$tempfile"
+            \env rm -f "$tempfile"
         else
             [ "$_Z_OWNER" ] && chown $_Z_OWNER:"$(id -ng $_Z_OWNER)" "$tempfile"
-            env mv -f "$tempfile" "$datafile" || env rm -f "$tempfile"
+            \env mv -f "$tempfile" "$datafile" || \env rm -f "$tempfile"
         fi
 
     # tab completion
     elif [ "$1" = "--complete" -a -s "$datafile" ]; then
-        _z_dirs | awk -v q="$2" -F"|" '
+        _z_dirs | \awk -v q="$2" -F"|" '
             BEGIN {
                 q = substr(q, 3)
                 if( q == tolower(q) ) imatch = 1
@@ -130,7 +130,7 @@ _z() {
                     l) list=1;;
                     r) typ="rank";;
                     t) typ="recent";;
-                    x) sed -i -e "\:^${PWD}|.*:d" "$datafile";;
+                    x) \sed -i -e "\:^${PWD}|.*:d" "$datafile";;
                 esac; opt=${opt:1}; done;;
              *) fnd="$fnd${fnd:+ }$1";;
         esac; last=$1; [ "$#" -gt 0 ] && shift; done
@@ -146,7 +146,7 @@ _z() {
         [ -f "$datafile" ] || return
 
         local cd
-        cd="$( < <( _z_dirs ) awk -v t="$(date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
+        cd="$( < <( _z_dirs ) \awk -v t="$(\date +%s)" -v list="$list" -v typ="$typ" -v q="$fnd" -F"|" '
             function frecent(rank, time) {
               # relate frequency and time
               dx = t - time
