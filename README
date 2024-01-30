@@ -80,7 +80,7 @@ NOTES
    Frecency:
        Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted
        rank  that depends on how often and how recently something occurred. As
-       far as I know, Mouilla came up with the term.
+       far as I know, Mozilla came up with the term.
 
        To u, a directory that has low ranking but has been  accessed  recently
        will  quickly  have  higher rank than a directory accessed frequently a
