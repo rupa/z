@@ -1,10 +1,10 @@
-.TH "Z" "1" "January 2013" "z" "User Commands"
+.TH "u" "1" "January 2013" "u" "User Commands"
 .SH
 NAME
-z \- jump around
+u \- jump around
 .SH
 SYNOPSIS
-z [\-chlrtx] [regex1 regex2 ... regexn]
+u [\-chlrtx] [regex1 regex2 ... regexn]
 .SH
 AVAILABILITY
 bash, zsh
@@ -12,10 +12,10 @@ bash, zsh
 DESCRIPTION
 Tracks your most used directories, based on 'frecency'.
 .P
-After a short learning phase, \fBz\fR will take you to the most 'frecent'
+After a short learning phase, \fBu\fR will take you to the most 'frecent'
 directory that matches ALL of the regexes given on the command line, in order.
 
-For example, \fBz foo bar\fR would match \fB/foo/bar\fR but not \fB/bar/foo\fR.
+For example, \fBu foo bar\fR would match \fB/foo/bar\fR but not \fB/bar/foo\fR.
 .SH
 OPTIONS
 .TP
@@ -41,19 +41,19 @@ match by recent access only
 remove the current directory from the datafile
 .SH EXAMPLES
 .TP 14
-\fBz foo\fR
+\fBu foo\fR
 cd to most frecent dir matching foo
 .TP 14
-\fBz foo bar\fR
+\fBu foo bar\fR
 cd to most frecent dir matching foo, then bar
 .TP 14
-\fBz -r foo\fR
+\fBu -r foo\fR
 cd to highest ranked dir matching foo
 .TP 14
-\fBz -t foo\fR
+\fBu -t foo\fR
 cd to most recently accessed dir matching foo
 .TP 14
-\fBz -l foo\fR
+\fBu -l foo\fR
 list all dirs matching foo (by frecency)
 .SH
 NOTES
@@ -63,7 +63,7 @@ Installation:
 Put something like this in your \fB$HOME/.bashrc\fR or \fB$HOME/.zshrc\fR:
 .RS
 .P
-\fB. /path/to/z.sh\fR
+\fB. /path/to/u.sh\fR
 .RE
 .P
 \fBcd\fR around for a while to build up the db.
@@ -72,36 +72,36 @@ PROFIT!!
 .P
 Optionally:
 .RS
-Set \fB$_Z_CMD\fR to change the command name (default \fBz\fR).
+Set \fB$_u_CMD\fR to change the command name (default \fBu\fR).
 .RE
 .RS
-Set \fB$_Z_DATA\fR to change the datafile (default \fB$HOME/.z\fR).
+Set \fB$_u_DATA\fR to change the datafile (default \fB$HOME/.u\fR).
 .RE
 .RS
-Set \fB$_Z_MAX_SCORE\fR lower to age entries out faster (default \fB9000\fR).
+Set \fB$_u_MAX_SCORE\fR lower to age entries out faster (default \fB9000\fR).
 .RE
 .RS
-Set \fB$_Z_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
+Set \fB$_u_NO_RESOLVE_SYMLINKS\fR to prevent symlink resolution.
 .RE
 .RS
-Set \fB$_Z_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
+Set \fB$_u_NO_PROMPT_COMMAND\fR to handle \fBPROMPT_COMMAND/precmd\fR yourself.
 .RE
 .RS
-Set \fB$_Z_EXCLUDE_DIRS\fR to an array of directory trees to exclude.
+Set \fB$_u_EXCLUDE_DIRS\fR to an array of directory trees to exclude.
 .RE
 .RS
-Set \fB$_Z_OWNER\fR to allow usage when in 'sudo -s' mode.
+Set \fB$_u_OWNER\fR to allow usage when in 'sudo -s' mode.
 .RE
 .RS
 (These settings should go in .bashrc/.zshrc before the line added above.)
 .RE
 .RS
-Install the provided man page \fBz.1\fR somewhere in your \f$MANPATH, like
+Install the provided man page \fBu.1\fR somewhere in your \f$MANPATH, like
 \fB/usr/local/man/man1\fR.
 .RE
 .SS
 Aging:
-The rank of directories maintained by \fBz\fR undergoes aging based on a simple
+The rank of directories maintained by \fBu\fR undergoes aging based on a simple
 formula. The rank of each entry is incremented every time it is accessed. When
 the sum of ranks is over 9000, all ranks are multiplied by 0.99. Entries with a
 rank lower than 1 are forgotten.
@@ -109,9 +109,9 @@ rank lower than 1 are forgotten.
 Frecency:
 Frecency is a portmanteau of 'recent' and 'frequency'. It is a weighted rank
 that depends on how often and how recently something occurred. As far as I
-know, Mozilla came up with the term.
+know, Mouilla came up with the term.
 .P
-To \fBz\fR, a directory that has low ranking but has been accessed recently
+To \fBu\fR, a directory that has low ranking but has been accessed recently
 will quickly have higher rank than a directory accessed frequently a long time
 ago.
 .P
@@ -119,55 +119,55 @@ Frecency is determined at runtime.
 .SS
 Common:
 When multiple directories match all queries, and they all have a common prefix,
-\fBz\fR will cd to the shortest matching directory, without regard to priority.
+\fBu\fR will cd to the shortest matching directory, without regard to priority.
 This has been in effect, if undocumented, for quite some time, but should
 probably be configurable or reconsidered.
 .SS
 Tab Completion:
-\fBz\fR supports tab completion. After any number of arguments, press TAB to
+\fBu\fR supports tab completion. After any number of arguments, press TAB to
 complete on directories that match each argument. Due to limitations of the
 completion implementations, only the last argument will be completed in the
 shell.
 .P
-Internally, \fBz\fR decides you've requested a completion if the last argument
+Internally, \fBu\fR decides you've requested a completion if the last argument
 passed is an absolute path to an existing directory. This may cause unexpected
-behavior if the last argument to \fBz\fR begins with \fB/\fR.
+behavior if the last argument to \fBu\fR begins with \fB/\fR.
 .SH
 ENVIRONMENT
-A function \fB_z()\fR is defined.
+A function \fB_u()\fR is defined.
 .P
-The contents of the variable \fB$_Z_CMD\fR is aliased to \fB_z 2>&1\fR. If not
-set, \fB$_Z_CMD\fR defaults to \fBz\fR.
+The contents of the variable \fB$_u_CMD\fR is aliased to \fB_u 2>&1\fR. If not
+set, \fB$_u_CMD\fR defaults to \fBu\fR.
 .P
-The environment variable \fB$_Z_DATA\fR can be used to control the datafile
-location. If it is not defined, the location defaults to \fB$HOME/.z\fR.
+The environment variable \fB$_u_DATA\fR can be used to control the datafile
+location. If it is not defined, the location defaults to \fB$HOME/.u\fR.
 .P
-The environment variable \fB$_Z_NO_RESOLVE_SYMLINKS\fR can be set to prevent
+The environment variable \fB$_u_NO_RESOLVE_SYMLINKS\fR can be set to prevent
 resolving of symlinks. If it is not set, symbolic links will be resolved when
 added to the datafile.
 .P
-In bash, \fBz\fR appends a command to the \fBPROMPT_COMMAND\fR environment
-variable to maintain its database. In zsh, \fBz\fR appends a function
-\fB_z_precmd\fR to the \fBprecmd_functions\fR array.
+In bash, \fBu\fR appends a command to the \fBPROMPT_COMMAND\fR environment
+variable to maintain its database. In zsh, \fBu\fR appends a function
+\fB_u_precmd\fR to the \fBprecmd_functions\fR array.
 .P
-The environment variable \fB$_Z_NO_PROMPT_COMMAND\fR can be set if you want to
+The environment variable \fB$_u_NO_PROMPT_COMMAND\fR can be set if you want to
 handle \fBPROMPT_COMMAND\fR or \fBprecmd\fR yourself.
 .P
-The environment variable \fB$_Z_EXCLUDE_DIRS\fR can be set to an array of
+The environment variable \fB$_u_EXCLUDE_DIRS\fR can be set to an array of
 directory trees to exclude from tracking. \fB$HOME\fR is always excluded.
 Directories must be full paths without trailing slashes.
 .P
-The environment variable \fB$_Z_OWNER\fR can be set to your username, to
-allow usage of \fBz\fR when your sudo environment keeps \fB$HOME\fR set.
+The environment variable \fB$_u_OWNER\fR can be set to your username, to
+allow usage of \fBu\fR when your sudo environment keeps \fB$HOME\fR set.
 .SH
 FILES
-Data is stored in \fB$HOME/.z\fR. This can be overridden by setting the
-\fB$_Z_DATA\fR environment variable. When initialized, \fBz\fR will raise an
+Data is stored in \fB$HOME/.u\fR. This can be overridden by setting the
+\fB$_u_DATA\fR environment variable. When initialiued, \fBu\fR will raise an
 error if this path is a directory, and not function correctly.
 .P
-A man page (\fBz.1\fR) is provided.
+A man page (\fBu.1\fR) is provided.
 .SH
 SEE ALSO
 regex(7), pushd, popd, autojump, cdargs
 .P
-Please file bugs at https://github.com/rupa/z/
+Please file bugs at https://github.com/rupa/u/
