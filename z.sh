@@ -32,8 +32,20 @@
 }
 
 _z() {
+    local DATA_FILE_NAME="z"
+    local DIRECTORY_NAME="z"
 
-    local datafile="${_Z_DATA:-$HOME/.z}"
+    # fallback to default XDG directory
+    local DEFAULT_DATA_DIR="$HOME/.local/state/$DIRECTORY_NAME"
+    local datafile=$DEFAULT_DATA_DIR/$DATA_FILE_NAME
+
+    # Backwards compatible _Z_DATA definition
+    if [[ -n $_Z_DATA ]]; then
+        datafile=$_Z_DATA
+    # respect user specific XDG settings
+    elif [[ -n $XDG_DATA_HOME ]]; then
+        datafile=$XDG_DATA_HOME/$DIRECTORY_NAME/$DATA_FILE_NAME
+    fi
 
     # if symlink, dereference
     [ -h "$datafile" ] && datafile=$(readlink "$datafile")
