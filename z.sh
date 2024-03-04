@@ -33,7 +33,7 @@ _z() {
     local DIRECTORY_NAME="z"
 
     # fallback to default XDG directory
-    local DEFAULT_DATA_DIR="$HOME/.local/share/$DIRECTORY_NAME"
+    local DEFAULT_DATA_DIR="$HOME/.local/state/$DIRECTORY_NAME"
     local datafile=$DEFAULT_DATA_DIR/$DATA_FILE_NAME
 
     # Backwards compatible _Z_DATA definition
